@@ -56,42 +56,56 @@ function App() {
   const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
   const processData = (data: VotesData, timestamp?: number) => {
-    const rawData = data.payload.settings.results.visual_data[0];
+    // Check if we have visual data (votes)
+    const hasVisualData = data.payload.settings?.results?.visual_data?.length > 0;
+    const rawData = hasVisualData ? data.payload.settings.results.visual_data[0] : {};
+
     // Map array of objects to array of strings (names)
-    const validCandidates = data.payload.candidates?.map(c => c.name);
+    const validCandidates = data.payload.candidates?.map(c => c.name) || [];
     const candidatesList: Candidate[] = [];
 
-    for (const [key, value] of Object.entries(rawData)) {
-      if (key !== 'round') {
-        // Filter by valid candidates list if available
-        if (validCandidates && !validCandidates.includes(key)) {
-          continue;
+    if (hasVisualData) {
+      // Normal mode: We have votes
+      for (const [key, value] of Object.entries(rawData)) {
+        if (key !== 'round') {
+          // Filter by valid candidates list if available
+          if (validCandidates.length > 0 && !validCandidates.includes(key)) {
+            continue;
+          }
+          candidatesList.push({ name: key, votes: value });
         }
-        candidatesList.push({ name: key, votes: value });
       }
+    } else if (validCandidates.length > 0) {
+      // Fallback mode: We only have candidates, no votes yet
+      validCandidates.forEach(name => {
+        candidatesList.push({ name, votes: 0 });
+      });
     }
 
     candidatesList.sort((a, b) => b.votes - a.votes);
 
     const total = candidatesList.reduce((sum, c) => sum + c.votes, 0);
 
-    // Calculate Standard Deviation
-    const mean = total / candidatesList.length;
-    const variance = candidatesList.reduce((sum, c) => sum + Math.pow(c.votes - mean, 2), 0) / candidatesList.length;
-    const stdDev = Math.sqrt(variance);
-    const threshold = mean + stdDev;
+    // Calculate Standard Deviation (only if we have votes)
+    let threshold = 0;
+    if (total > 0) {
+      const mean = total / candidatesList.length;
+      const variance = candidatesList.reduce((sum, c) => sum + Math.pow(c.votes - mean, 2), 0) / candidatesList.length;
+      const stdDev = Math.sqrt(variance);
+      threshold = mean + stdDev;
+    }
 
     const enrichedCandidates = candidatesList.map((c) => {
       let botPercentage = '0';
 
-      if (c.votes > threshold) {
+      if (total > 0 && c.votes > threshold) {
         const suspiciousVotes = c.votes - threshold;
         botPercentage = ((suspiciousVotes / c.votes) * 100).toFixed(1);
       }
 
       const baseCandidate = {
         ...c,
-        percentage: ((c.votes / total) * 100).toFixed(1),
+        percentage: total > 0 ? ((c.votes / total) * 100).toFixed(1) : '0',
         botPercentage: botPercentage === '0.0' ? '0' : botPercentage
       };
 
@@ -111,8 +125,7 @@ function App() {
   };
 
   const fetchData = async () => {
-    if (isVotingPaused) return;
-
+    // Removed isVotingPaused check to allow continuous updates
     try {
       const targetUrl = apiUrl;
       const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl + '?_=' + Date.now());
@@ -151,16 +164,13 @@ function App() {
       }
     }
 
-    if (shouldFetch && !isVotingPaused) {
+    if (shouldFetch) {
       fetchData();
-    } else if (isVotingPaused && !cached) {
-      setLoading(false);
     }
 
     let lastFetchMinute = -1;
     const interval = setInterval(() => {
-      if (isVotingPaused) return;
-
+      // Removed isVotingPaused check to allow continuous updates
       const now = new Date();
       const min = now.getMinutes();
       const sec = now.getSeconds();
@@ -214,8 +224,8 @@ function App() {
       <VersionChecker />
 
       {isVotingPaused && (
-        <div className="fixed top-0 left-0 w-full bg-yellow-500/90 text-black font-bold text-center py-3 z-50 backdrop-blur-sm shadow-lg animate-pulse">
-          ⛔ VOTACIONES CERRADAS: Los resultados ya han sido revelados en el stream.
+        <div className="fixed top-0 left-0 w-full bg-blue-600/90 text-white font-bold text-center py-2 z-50 backdrop-blur-sm shadow-lg text-sm">
+          ℹ️ Esperando la próxima votación del día. Los datos se siguen actualizando.
         </div>
       )}
 
@@ -226,7 +236,7 @@ function App() {
         onNavigate={setCurrentView}
       />
 
-      <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 ${isVotingPaused ? 'mt-12' : ''}`}>
+      <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 ${isVotingPaused ? 'mt-8' : ''}`}>
 
         {/* HERO / STATS HEADER - Always visible */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12 animate-in fade-in slide-in-from-bottom-2">
@@ -244,6 +254,9 @@ function App() {
               <h1 className={`text-4xl md:text-6xl font-bold leading-tight font-serif ${isDark ? 'text-white' : 'text-[#1a1a1a]'}`}>
                 Eliminación <br /> en Proceso
               </h1>
+              <p className={`text-[10px] italic opacity-60 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                * Los resultados pueden variar por decisión de producción.
+              </p>
               <a
                 href={import.meta.env.VITE_VOTE_URL}
                 target="_blank"

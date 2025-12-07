@@ -12,8 +12,8 @@ export const BotLeaderBoard = ({ candidates, isDark }: BotLeaderBoardProps) => {
         card: isDark
             ? 'bg-[#0a0a0a] border-[#8c3034]/30 hover:bg-[#8c3034]/5'
             : 'bg-white border-pink-100 hover:bg-pink-50 shadow-sm',
-        textPrimary: isDark ? 'text-white' : 'text-gray-900',
-        textSecondary: isDark ? 'text-gray-400' : 'text-gray-500',
+        textPrimary: isDark ? 'text-gray-100' : 'text-gray-900',
+        textSecondary: isDark ? 'text-gray-400' : 'text-gray-600',
         accent: isDark ? 'text-[#8c3034]' : 'text-pink-600',
         border: isDark ? 'border-[#8c3034]' : 'border-pink-500',
     };
@@ -22,12 +22,12 @@ export const BotLeaderBoard = ({ candidates, isDark }: BotLeaderBoardProps) => {
         <div className="mb-12">
             <div className={`border-t pt-4 flex flex-col md:flex-row justify-between items-center gap-4 mb-6 ${isDark ? 'border-[#1f1f1f]' : 'border-gray-200'}`}>
                 <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded ${isDark ? 'bg-[#1a1a1a] text-gray-500' : 'bg-gray-100 text-gray-600'}`}>
+                    <div className={`p-2 rounded ${isDark ? 'bg-[#1a1a1a] text-gray-400' : 'bg-gray-100 text-gray-600'}`}>
                         <BarChart3 size={16} />
                     </div>
                     <div>
-                        <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Análisis de Integridad</p>
-                        <p className={`text-[10px] ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>Sistema anti-bots activo</p>
+                        <p className={`text-sm font-medium ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>Análisis de Votos</p>
+                        <p className={`text-[10px] ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>Estimación de duplicados</p>
                     </div>
                 </div>
             </div>
@@ -63,8 +63,8 @@ export const BotLeaderBoard = ({ candidates, isDark }: BotLeaderBoardProps) => {
                                 <div className={`text-xl font-bold ${styles.accent}`}>
                                     {candidate.botPercentage}%
                                 </div>
-                                <div className={`text-[10px] uppercase font-semibold opacity-70 ${styles.accent}`}>
-                                    Probabilidad
+                                <div className={`text-[10px] uppercase font-semibold opacity-70 ${styles.textSecondary}`}>
+                                    Votos Duplicados (Est.)
                                 </div>
                             </div>
                         </div>
