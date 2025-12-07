@@ -24,7 +24,7 @@ export const AboutSection = ({ isDark }: AboutSectionProps) => {
 
             <div className={`space-y-6 text-lg leading-relaxed ${styles.textSecondary}`}>
                 <p>
-                    <strong className={styles.textPrimary}>La Mansión de los Streamers</strong> es el reality show más ambicioso del streaming latinoamericano, creado por <span className="font-bold">Westcol</span>. Un experimento social donde creadores de contenido conviven 24/7 bajo el mismo techo, enfrentando desafíos, eliminaciones y la convivencia diaria.
+                    <strong className={styles.textPrimary}>La Mansión de los Streamers</strong> es el proyecto más ambicioso del streaming latinoamericano, creado por <span className="font-bold">Westcol</span>. Un experimento social donde creadores de contenido conviven 24/7 bajo el mismo techo, enfrentando desafíos, eliminaciones y la convivencia diaria.
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-6 my-8">
