@@ -23,10 +23,15 @@ function App() {
   const [dangerList, setDangerList] = useState<string[]>([]);
 
   // Theme State
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem(THEME_CACHE_KEY) || 'dark';
-  });
+  const [theme, setTheme] = useState('dark');
   const isDark = theme === 'dark';
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem(THEME_CACHE_KEY);
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = isDark ? 'light' : 'dark';
@@ -37,10 +42,14 @@ function App() {
   // View State
   const [currentView, setCurrentView] = useState('dashboard');
 
-  const [currentFilter, setCurrentFilter] = useState<FilterType>(() => {
-    const saved = localStorage.getItem(FILTER_CACHE_KEY);
-    return (saved as FilterType) || 'all';
-  });
+  const [currentFilter, setCurrentFilter] = useState<FilterType>('all');
+
+  useEffect(() => {
+    const savedFilter = localStorage.getItem(FILTER_CACHE_KEY);
+    if (savedFilter) {
+      setCurrentFilter(savedFilter as FilterType);
+    }
+  }, []);
 
   const [totalVotes, setTotalVotes] = useState(0);
   const [lastFetchTime, setLastFetchTime] = useState('--:--');
@@ -147,6 +156,9 @@ function App() {
   };
 
   useEffect(() => {
+    // Only run on client
+    if (typeof window === 'undefined') return;
+
     const cached = localStorage.getItem(CACHE_KEY);
     let shouldFetch = true;
 
@@ -213,6 +225,8 @@ function App() {
     );
   }
 
+  const isNoVotingState = isVotingPaused && totalVotes === 0;
+
   return (
     <div className={`min-h-screen font-sans transition-colors duration-500 ${isDark ? 'bg-[#050505] text-gray-100' : 'bg-[#f8f9fa] text-gray-900'}`}>
 
@@ -223,7 +237,7 @@ function App() {
 
       <VersionChecker />
 
-      {isVotingPaused && (
+      {isVotingPaused && !isNoVotingState && (
         <div className="fixed top-0 left-0 w-full bg-blue-600/90 text-white font-bold text-center py-2 z-50 backdrop-blur-sm shadow-lg text-sm">
           ℹ️ Esperando la próxima votación del día. Los datos se siguen actualizando.
         </div>
@@ -232,11 +246,11 @@ function App() {
       <Header
         isDark={isDark}
         toggleTheme={toggleTheme}
-        currentView={currentView}
+        currentView={(isNoVotingState && currentView !== 'about') ? 'participants' : currentView}
         onNavigate={setCurrentView}
       />
 
-      <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 ${isVotingPaused ? 'mt-8' : ''}`}>
+      <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 ${isVotingPaused && !isNoVotingState ? 'mt-8' : ''}`}>
 
         {/* HERO / STATS HEADER - Always visible */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12 animate-in fade-in slide-in-from-bottom-2">
@@ -248,26 +262,30 @@ function App() {
                   Día 5
                 </span>
                 <span className={`text-xs font-semibold flex items-center gap-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
-                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span> Votación en tiempo real
+                  <span className={`w-1.5 h-1.5 rounded-full ${isNoVotingState ? 'bg-gray-500' : 'bg-red-500 animate-pulse'}`}></span>
+                  {isNoVotingState ? 'Votación Finalizada' : 'Votación en tiempo real'}
                 </span>
               </div>
               <h1 className={`text-4xl md:text-6xl font-bold leading-tight font-serif ${isDark ? 'text-white' : 'text-[#1a1a1a]'}`}>
-                Eliminación <br /> en Proceso
+                {isNoVotingState ? 'Votación No Activa' : <>Eliminación <br /> en Proceso</>}
               </h1>
-              <p className={`text-[10px] italic opacity-60 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+              <p className={`text-[10px] italic opacity-60 ${isDark ? 'text-sm' : 'text-sm'}`}>
                 * Los resultados pueden variar por decisión de producción.
               </p>
-              <a
-                href={import.meta.env.VITE_VOTE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`inline-block mt-4 px-8 py-3 rounded font-bold uppercase tracking-wider text-sm transition-all ${isDark
-                  ? 'bg-gradient-to-r from-[#8c3034] to-[#6d2528] text-white shadow-[0_0_20px_rgba(140,48,52,0.3)]'
-                  : 'bg-[#8c3034] text-white hover:bg-[#70262a] shadow-md'
-                  }`}
-              >
-                Votar Ahora
-              </a>
+
+              {!isNoVotingState && (
+                <a
+                  href={import.meta.env.VITE_VOTE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-block mt-4 px-8 py-3 rounded font-bold uppercase tracking-wider text-sm transition-all ${isDark
+                    ? 'bg-gradient-to-r from-[#8c3034] to-[#6d2528] text-white shadow-[0_0_20px_rgba(140,48,52,0.3)]'
+                    : 'bg-[#8c3034] text-white hover:bg-[#70262a] shadow-md'
+                    }`}
+                >
+                  Votar Ahora
+                </a>
+              )}
             </div>
 
             <StatsPanel
@@ -275,6 +293,8 @@ function App() {
               totalCandidates={candidates.length}
               countdown={countdown}
               isDark={isDark}
+              showVotes={!isNoVotingState}
+              showCountdown={!isNoVotingState}
             />
           </div>
 
@@ -290,7 +310,7 @@ function App() {
         </div>
 
         {/* VIEW CONTENT */}
-        {currentView === 'dashboard' && (
+        {!isNoVotingState && currentView === 'dashboard' && (
           <>
             <DangerZone candidates={dangerCandidates} isDark={isDark} />
 
@@ -319,8 +339,14 @@ function App() {
           </>
         )}
 
-        {currentView === 'participants' && (
-          <ParticipantsGrid candidates={candidates} isDark={isDark} />
+        {(currentView === 'participants' || (isNoVotingState && currentView !== 'about')) && (
+          <div className="space-y-6">
+            <h2 className={`text-3xl font-bold font-serif text-center mb-8 ${isDark ? 'text-white' : 'text-[#1a1a1a]'}`}>
+              Activos en La Mansión
+            </h2>
+            <p className="text-center text-sm">En esta sección se muestran los candidatos que están activos en la votación.</p>
+            <ParticipantsGrid candidates={candidates} isDark={isDark} />
+          </div>
         )}
 
         {currentView === 'about' && (

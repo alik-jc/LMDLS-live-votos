@@ -14,9 +14,12 @@ export const AboutSection = ({ isDark }: AboutSectionProps) => {
 
     return (
         <div className={`max-w-4xl mx-auto p-8 rounded-xl border ${styles.container} animate-in fade-in slide-in-from-bottom-4`}>
-            <div className="flex items-center gap-3 mb-6">
-                <Info className={styles.accent} size={28} />
-                <h2 className={`text-3xl font-bold font-serif ${styles.textPrimary}`}>¿Qué es La Mansión?</h2>
+            <div className="flex flex-col items-center gap-4 mb-8 text-center">
+                <img src="/lamansion-logo.svg" alt="La Mansión Logo" className="w-24 h-24 object-contain drop-shadow-[0_0_15px_rgba(140,48,52,0.5)]" />
+                <div className="flex items-center gap-3">
+                    <Info className={styles.accent} size={28} />
+                    <h2 className={`text-3xl font-bold font-serif ${styles.textPrimary}`}>¿Qué es La Mansión?</h2>
+                </div>
             </div>
 
             <div className={`space-y-6 text-lg leading-relaxed ${styles.textSecondary}`}>

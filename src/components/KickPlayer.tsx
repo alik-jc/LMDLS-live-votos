@@ -16,11 +16,15 @@ export const KickPlayer = ({ channelSlug, isDark, isOpen, onClose, embedded = fa
     const [isLive, setIsLive] = useState(false);
     const [isCheckingStream, setIsCheckingStream] = useState(true);
 
-    // Initialize mute state from localStorage (default to true/muted if not set)
-    const [isMuted, setIsMuted] = useState(() => {
+    // Initialize mute state (default to true/muted)
+    const [isMuted, setIsMuted] = useState(true);
+
+    useEffect(() => {
         const saved = localStorage.getItem(MUTE_CACHE_KEY);
-        return saved !== null ? saved === 'true' : true;
-    });
+        if (saved !== null) {
+            setIsMuted(saved === 'true');
+        }
+    }, []);
 
     useEffect(() => {
         if (!isOpen) return;
