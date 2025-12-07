@@ -126,6 +126,9 @@ function App() {
 
     if (shouldFetch && !isVotingPaused) {
       fetchData();
+    } else if (isVotingPaused && !cached) {
+      // If paused and no cache (e.g. incognito), stop loading so alert shows
+      setLoading(false);
     }
 
     let lastFetchMinute = -1;
