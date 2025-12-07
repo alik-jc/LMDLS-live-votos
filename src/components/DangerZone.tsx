@@ -1,62 +1,56 @@
-import { getAvatar, getGender } from '../utils/helpers';
+import { AlertTriangle, Activity } from 'lucide-react';
+import { getAvatar } from '../utils/helpers';
 import type { Candidate } from '../types';
 
 interface DangerZoneProps {
     candidates: Candidate[];
+    isDark: boolean;
 }
 
-export const DangerZone = ({ candidates }: DangerZoneProps) => {
+export const DangerZone = ({ candidates, isDark }: DangerZoneProps) => {
     if (candidates.length === 0) return null;
 
+    const styles = {
+        titleFont: 'font-serif',
+        titleColor: isDark ? 'text-white' : 'text-[#8c3034]',
+        card: isDark
+            ? 'bg-[#0e0e0e] border-[#8c3034]/50 shadow-none'
+            : 'bg-white border-l-4 border-l-[#8c3034] shadow-sm',
+        textColor: isDark ? 'text-white' : 'text-[#1a1a1a]',
+        infoBox: isDark
+            ? 'bg-[#8c3034]/10 border-[#8c3034]/20 text-[#f8e2bb]'
+            : 'bg-orange-50 border-orange-100 text-orange-800',
+    };
+
     return (
-        <div className="mb-10">
-            <div className="flex items-center gap-3 mb-4">
-                <span className="text-2xl">⚠️</span>
-                <div>
-                    <div className="text-white font-bold text-lg">ZONA DE ELIMINACIÓN</div>
-                    <div className="text-sm text-gray-400">
-                        Los participantes con menos votos actualmente.
-                    </div>
-                </div>
+        <div className="mb-16">
+            <div className="flex items-center justify-between mb-4">
+                <h2 className={`text-xl font-bold flex items-center gap-2 ${styles.titleFont} ${styles.titleColor}`}>
+                    <AlertTriangle size={20} className="text-[#8c3034]" /> Zona de Riesgo
+                </h2>
+                <span className="text-xs text-gray-500 italic hidden sm:block">Los 2 participantes con menos votos</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {candidates.map((candidate) => {
-                    const gender = getGender(candidate.name);
-                    return (
-                        <div
-                            key={candidate.name}
-                            className="bg-gradient-to-br from-danger/10 to-black/80 border border-danger/30 rounded-2xl p-5 flex items-center gap-5 relative overflow-hidden shadow-[0_0_30px_rgba(239,68,68,0.1)] animate-[pulse-border_3s_infinite]"
-                        >
-                            <div className="absolute top-0 left-0 bottom-0 w-1 bg-danger shadow-[0_0_15px_var(--danger)]" />
-
-                            <img
-                                src={getAvatar(candidate.name)}
-                                alt={candidate.name}
-                                className="w-20 h-20 rounded-full border-4 border-danger object-cover shadow-[0_0_20px_rgba(239,68,68,0.4)]"
-                                loading="lazy"
-                            />
-
-                            <div className="flex-1">
-                                <h3 className="text-xl font-semibold text-white mb-1">
-                                    {candidate.name}
-                                </h3>
-                                <p className="text-danger text-sm font-semibold uppercase">
-                                    Posible Eliminación ({gender === 'M' ? 'H' : 'M'})
-                                </p>
-                            </div>
-
-                            <div className="text-right">
-                                <div className="text-2xl font-bold">
-                                    {candidate.votes.toLocaleString()}
-                                </div>
-                                <div className="text-sm text-white/50">
-                                    {candidate.percentage}%
-                                </div>
-                            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {candidates.map((person, index) => (
+                    <div key={person.name} className={`p-5 flex items-center gap-4 rounded-lg transition-all hover:translate-y-[-2px] border ${styles.card}`}>
+                        <div className="relative">
+                            <img src={getAvatar(person.name)} className="w-16 h-16 rounded-full object-cover border-2 border-gray-100" alt={person.name} />
+                            <span className="absolute -bottom-1 -right-1 bg-[#8c3034] text-white text-[10px] font-bold px-1.5 rounded">#{index + 19}</span> {/* Mock rank logic for now */}
                         </div>
-                    );
-                })}
+                        <div>
+                            <h3 className={`font-bold text-lg ${styles.textColor}`}>{person.name}</h3>
+                            <div className="text-[#8c3034] text-xs font-bold uppercase mt-1">En Peligro</div>
+                            <div className="text-xs text-gray-500 mt-1">{person.votes.toLocaleString()} votos ({person.percentage}%)</div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Info Box */}
+            <div className={`mt-4 p-3 rounded border text-xs flex gap-2 ${styles.infoBox}`}>
+                <Activity size={16} className="shrink-0" />
+                <p><strong>Atención:</strong> Si la votación cerrara en este momento, estos participantes abandonarían La Mansión.</p>
             </div>
         </div>
     );

@@ -12,15 +12,12 @@
   --gold: #fbbf24;
 }
 
-body {
-  margin: 0;
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  background-color: var(--bg-dark);
-  background-image:
-    radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.08), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.08), transparent 25%);
-  color: white;
-  min-height: 100vh;
+@layer base {
+  body {
+    @apply antialiased transition-colors duration-500 font-sans;
+    margin: 0;
+    min-height: 100vh;
+  }
 }
 
 @keyframes pulse-border {

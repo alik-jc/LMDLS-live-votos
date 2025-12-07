@@ -1,88 +1,87 @@
+import { TrendingUp, Flame } from 'lucide-react';
 import { getAvatar } from '../utils/helpers';
 import type { Candidate } from '../types';
 
 interface LeaderBoardProps {
     candidates: Candidate[];
     dangerList: string[];
-    maxVotes: number;
+    isDark: boolean;
 }
 
-export const LeaderBoard = ({ candidates, dangerList, maxVotes }: LeaderBoardProps) => {
-    const getRankClass = (index: number) => {
-        if (index === 0) return 'bg-gradient-to-br from-gold to-orange-600 text-black shadow-[0_0_15px_rgba(251,191,36,0.3)]';
-        if (index === 1) return 'bg-gradient-to-br from-gray-200 to-gray-400 text-black';
-        if (index === 2) return 'bg-gradient-to-br from-orange-600 to-orange-800 text-white';
-        return 'bg-white/5 text-gray-400';
-    };
-
-    const getBarColor = (index: number, isDanger: boolean) => {
-        if (isDanger) return 'bg-danger';
-        if (index === 0) return 'bg-gold';
-        return 'bg-primary';
+export const LeaderBoard = ({ candidates, dangerList, isDark }: LeaderBoardProps) => {
+    const styles = {
+        cardBg: isDark ? 'bg-[#111] border border-white/5' : 'bg-white border border-gray-200 shadow-sm',
+        tableHeader: isDark ? 'bg-[#151515] text-gray-400' : 'bg-gray-50 text-gray-500',
+        tableRow: isDark ? 'hover:bg-white/5 border-white/5' : 'hover:bg-gray-50 border-gray-100',
+        textPrimary: isDark ? 'text-white' : 'text-gray-900',
+        textSecondary: isDark ? 'text-gray-300' : 'text-gray-800',
+        rankBadge: (rank: number) => {
+            if (rank <= 3) return 'bg-[#f8e2bb] text-[#8c3034]';
+            return isDark ? 'bg-white/10 text-gray-400' : 'bg-gray-100 text-gray-500';
+        }
     };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {candidates.map((candidate, index) => {
-                const isDanger = dangerList.includes(candidate.name);
-                const barWidth = (candidate.votes / maxVotes) * 100;
+        <div className={`rounded-xl overflow-hidden ${styles.cardBg}`}>
+            <table className="w-full">
+                <thead className={styles.tableHeader}>
+                    <tr>
+                        <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-wider">Rank</th>
+                        <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-wider">Participante</th>
+                        <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-wider hidden sm:table-cell">Tendencia</th>
+                        <th className="px-6 py-4 text-left text-[10px] font-bold uppercase tracking-wider w-1/4 hidden sm:table-cell">Popularidad</th>
+                        <th className="px-6 py-4 text-right text-[10px] font-bold uppercase tracking-wider">Votos</th>
+                    </tr>
+                </thead>
+                <tbody className={`divide-y ${isDark ? 'divide-white/5' : 'divide-gray-100'}`}>
+                    {candidates.map((p, index) => {
+                        const rank = index + 1;
+                        const isDanger = dangerList.includes(p.name);
+                        // Mock trend logic for visual variety
+                        let trend: 'up' | 'down' | 'stable' | 'danger' = 'stable';
+                        if (index < 5) trend = 'up';
+                        else if (index > 15) trend = 'danger';
+                        else if (index > 10) trend = 'down';
 
-                return (
-                    <div
-                        key={candidate.name}
-                        className={`bg-card-bg border ${isDanger ? 'border-danger/30 bg-danger/5' : 'border-white/10'
-                            } p-3 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/10 hover:translate-x-1 group`}
-                    >
-                        <div
-                            className={`w-8 h-8 flex items-center justify-center rounded-lg font-bold text-sm flex-shrink-0 ${getRankClass(
-                                index
-                            )}`}
-                        >
-                            {index + 1}
-                        </div>
-
-                        <img
-                            src={getAvatar(candidate.name)}
-                            alt={candidate.name}
-                            className={`w-11 h-11 rounded-full object-cover border-2 ${index === 0 ? 'border-gold' : 'border-white/10'
-                                }`}
-                            loading="lazy"
-                        />
-
-                        <div className="flex-1 min-w-0">
-                            <div className="font-semibold text-sm mb-1 flex items-center gap-2 transition-all group-hover:text-white group-hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]">
-                                <span className="truncate">{candidate.name}</span>
-                                {isDanger && <span className="text-xs text-danger">⚠️</span>}
-                            </div>
-                            <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                                <div
-                                    className={`h-full rounded-full transition-all duration-1000 ${getBarColor(
-                                        index,
-                                        isDanger
-                                    )}`}
-                                    style={{ width: `${barWidth}%` }}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="text-right min-w-[70px]">
-                            <div className="font-bold text-sm transition-all group-hover:text-white group-hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]">
-                                {candidate.votes.toLocaleString()}
-                                {candidate.botPercentage && candidate.botPercentage !== '0' && (
-                                    <div className="mt-1 flex justify-end">
-                                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-white bg-pink-500 px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(236,72,153,0.5)] animate-pulse" title="Posible porcentaje de bots">
-                                            🤖 {candidate.botPercentage}% BOTS
-                                        </span>
+                        return (
+                            <tr key={p.name} className={`group transition-colors ${styles.tableRow}`}>
+                                <td className="px-6 py-4">
+                                    <span className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-xs ${styles.rankBadge(rank)}`}>
+                                        {rank}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="flex items-center gap-3">
+                                        <img src={getAvatar(p.name)} className="w-10 h-10 rounded-full object-cover" alt="" />
+                                        <div>
+                                            <p className={`font-bold text-sm ${styles.textPrimary}`}>{p.name}</p>
+                                            {isDanger && <span className="text-[10px] text-red-500 font-bold uppercase">En Riesgo</span>}
+                                            {p.botPercentage && p.botPercentage !== '0' && (
+                                                <span className="ml-2 text-[10px] text-pink-500 font-bold uppercase">🤖 {p.botPercentage}% Bots</span>
+                                            )}
+                                        </div>
                                     </div>
-                                )}
-                            </div>
-                            <div className="text-xs text-gray-400">
-                                {candidate.percentage}%
-                            </div>
-                        </div>
-                    </div>
-                );
-            })}
+                                </td>
+                                <td className="px-6 py-4 text-center hidden sm:table-cell">
+                                    {trend === 'up' && <TrendingUp size={16} className="text-green-500 mx-auto" />}
+                                    {trend === 'down' && <TrendingUp size={16} className="text-red-400 rotate-180 mx-auto" />}
+                                    {trend === 'stable' && <span className="text-gray-400">-</span>}
+                                    {trend === 'danger' && <Flame size={16} className="text-red-500 mx-auto" />}
+                                </td>
+                                <td className="px-6 py-4 hidden sm:table-cell">
+                                    <div className={`w-full h-2 rounded-full overflow-hidden ${isDark ? 'bg-white/10' : 'bg-gray-100'}`}>
+                                        <div className="h-full bg-[#8c3034]" style={{ width: `${p.percentage}%` }}></div>
+                                    </div>
+                                    <p className="text-[10px] text-gray-400 mt-1">{p.percentage}% del total</p>
+                                </td>
+                                <td className={`px-6 py-4 text-right font-mono font-bold ${styles.textSecondary}`}>
+                                    {p.votes.toLocaleString()}
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
         </div>
     );
 };

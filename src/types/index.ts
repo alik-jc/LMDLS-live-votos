@@ -3,10 +3,23 @@ export interface Candidate {
     votes: number;
     percentage?: string;
     botPercentage?: string;
+    socials?: {
+        instagram?: string;
+        tiktok?: string;
+        twitch?: string;
+        kick?: string;
+    };
+    isLive?: boolean;
+    livePlatform?: 'tiktok' | 'twitch' | 'kick' | 'instagram';
 }
 
 export interface VotesData {
     payload: {
+        candidates?: Array<{
+            id: number;
+            name: string;
+            [key: string]: unknown;
+        }>;
         settings: {
             results: {
                 visual_data: Array<Record<string, number>>;
