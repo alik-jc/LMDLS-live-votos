@@ -1,7 +1,9 @@
 {
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist/client",
     "rewrites": [
         {
-            "source": "/(.*)",
+            "source": "/((?!assets/|.*\\.svg|.*\\.png|.*\\.ico|.*\\.xml|.*\\.txt).*)",
             "destination": "/api/ssr"
         }
     ]
