@@ -6,34 +6,34 @@ import type { PageContextBuiltIn } from 'vite-plugin-ssr/types';
 export const passToClient = ['pageProps', 'urlPathname'];
 
 type PageContext = PageContextBuiltIn & {
-    Page: any;
-    pageProps: any;
-    exports: {
-        documentProps?: {
-            title?: string;
-            description?: string;
-        };
+  Page: any;
+  pageProps: any;
+  exports: {
+    documentProps?: {
+      title?: string;
+      description?: string;
     };
+  };
 };
 
 export async function render(pageContext: PageContext) {
-    const { Page, pageProps } = pageContext;
+  const { Page, pageProps } = pageContext;
 
-    // This render() hook only supports SSR, see https://vite-plugin-ssr.com/render-modes for how to modify render() to support SPA
-    if (!Page) throw new Error('My render() hook expects pageContext.Page to be defined');
+  // This render() hook only supports SSR, see https://vite-plugin-ssr.com/render-modes for how to modify render() to support SPA
+  if (!Page) throw new Error('My render() hook expects pageContext.Page to be defined');
 
-    const pageHtml = ReactDOMServer.renderToString(
-        <PageShell pageContext={pageContext}>
-            <Page {...pageProps} />
-        </PageShell>
-    );
+  const pageHtml = ReactDOMServer.renderToString(
+    <PageShell pageContext={pageContext}>
+      <Page {...pageProps} />
+    </PageShell>
+  );
 
-    // See https://vite-plugin-ssr.com/head
-    const { documentProps } = pageContext.exports;
-    const title = (documentProps && documentProps.title) || 'La Mansión de los Streamers: Votación en Vivo, Ranking y Resultados | Westcol 2024';
-    const desc = (documentProps && documentProps.description) || '🔴 Votación OFICIAL en VIVO de La Mansión de los Streamers de Westcol. Consulta el ranking actualizado cada minuto, vota por tu favorito y descubre quién está en peligro de eliminación. Resultados en tiempo real 24/7.';
+  // See https://vite-plugin-ssr.com/head
+  const { documentProps } = pageContext.exports;
+  const title = (documentProps && documentProps.title) || 'LMDLS: Votación en Vivo | Westcol';
+  const desc = (documentProps && documentProps.description) || '🔴 Votación OFICIAL en VIVO de La Mansión de los Streamers de Westcol. Consulta el ranking actualizado cada minuto, vota por tu favorito y descubre quién está en peligro de eliminación. Resultados en tiempo real 24/7.';
 
-    const documentHtml = escapeInject`<!DOCTYPE html>
+  const documentHtml = escapeInject`<!DOCTYPE html>
     <html lang="es">
       <head>
         <meta charset="UTF-8" />
@@ -93,10 +93,10 @@ export async function render(pageContext: PageContext) {
       </body>
     </html>`;
 
-    return {
-        documentHtml,
-        pageContext: {
-            // We can add some `pageContext` here, which is useful if we want to do page redirection https://vite-plugin-ssr.com/page-redirection
-        }
-    };
+  return {
+    documentHtml,
+    pageContext: {
+      // We can add some `pageContext` here, which is useful if we want to do page redirection https://vite-plugin-ssr.com/page-redirection
+    }
+  };
 }
