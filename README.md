@@ -1,73 +1,26 @@
-# React + TypeScript + Vite
+# 🏰 La Mansión - Votación en Vivo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Visualizador en tiempo real de las votaciones para **La Mansión de los Streamers** de Westcol.
 
-Currently, two official plugins are available:
+## 🚀 Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **⏱️ Tiempo Real:** Actualización automática de votos cada 5 minutos.
+- **🤖 Detector de Bots:** Análisis inteligente para identificar patrones de votación sospechosos.
+- **📱 Diseño Responsive:** Optimizado para móviles y PC.
+- **⚡ Ultrarrápido:** Carga instantánea gracias al sistema de caché inteligente.
 
-## React Compiler
+## 🛠️ Tecnologías
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Desarrollado con las últimas tecnologías para garantizar el mejor rendimiento:
+- **React + Vite:** Velocidad extrema.
+- **Tailwind CSS:** Diseño moderno y limpio.
+- **TypeScript:** Código robusto y seguro.
 
-## Expanding the ESLint configuration
+## 🏁 Cómo iniciar
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1.  Clona el repositorio.
+2.  Instala dependencias: `npm install`
+3.  Inicia el servidor: `npm run dev`
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+*Hecho para la comunidad.*

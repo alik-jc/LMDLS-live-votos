@@ -73,6 +73,9 @@ function App() {
       const targetUrl = 'https://app.rankedvote.co/api/settings/rv/lamansiondia4';
       const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl + '?_=' + Date.now());
       const response = await fetch(proxyUrl, { cache: 'no-store' });
+
+      if (!response.ok) throw new Error('Network response was not ok');
+
       const data = await response.json();
 
       const now = Date.now();
@@ -80,6 +83,10 @@ function App() {
       processData(data, now);
     } catch (error) {
       console.error("Error fetching data:", error);
+      // If we don't have any candidates yet (no cache), stop loading to show empty state or error
+      if (candidates.length === 0) {
+        setLoading(false);
+      }
     }
   };
 
@@ -87,22 +94,24 @@ function App() {
   useEffect(() => {
     // Check Cache Initial Load
     const cached = localStorage.getItem(CACHE_KEY);
-    let initialLoadDone = false;
+    let shouldFetch = true;
 
     if (cached) {
       try {
         const { data, timestamp } = JSON.parse(cached);
+        // Always show cached data first (Stale-While-Revalidate)
+        processData(data, timestamp);
+
         const age = Date.now() - timestamp;
         if (age < CACHE_DURATION) {
-          processData(data, timestamp);
-          initialLoadDone = true;
+          shouldFetch = false;
         }
       } catch (e) {
         console.error("Cache parse error", e);
       }
     }
 
-    if (!initialLoadDone) {
+    if (shouldFetch) {
       fetchData();
     }
 

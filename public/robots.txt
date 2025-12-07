@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lamansionlivevotos.vercel.app/sitemap.xml

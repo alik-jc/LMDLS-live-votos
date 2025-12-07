@@ -1,28 +1,51 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>La Mansión - Votación en Vivo | Westcol</title>
-    <meta name="description" content="Sigue la votación en tiempo real de La Mansión de los Streamers de Westcol. Mira quién está en peligro y quién lidera el ranking." />
-    <meta name="keywords" content="westcol, la mansion, streamers, votacion, ranking, kick, colombia" />
-    <meta name="author" content="Westcol Community" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="La Mansión - Votación en Vivo | Westcol" />
-    <meta property="og:description" content="Sigue la votación en tiempo real de La Mansión de los Streamers de Westcol. Mira quién está en peligro y quién lidera el ranking." />
-    <meta property="og:image" content="https://i.imgur.com/KtdMrMY.png" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:title" content="La Mansión - Votación en Vivo | Westcol" />
-    <meta property="twitter:description" content="Sigue la votación en tiempo real de La Mansión de los Streamers de Westcol. Mira quién está en peligro y quién lidera el ranking." />
-    <meta property="twitter:image" content="https://i.imgur.com/KtdMrMY.png" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Mansión - Votación en Vivo | Westcol</title>
+  <meta name="description"
+    content="Sigue la votación en tiempo real de La Mansión de los Streamers de Westcol. Mira quién está en peligro y quién lidera el ranking." />
+  <meta name="keywords" content="westcol, la mansion, streamers, votacion, ranking, kick, colombia" />
+  <meta name="author" content="Westcol Community" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="La Mansión - Votación en Vivo | Westcol" />
+  <meta property="og:description"
+    content="Sigue la votación en tiempo real de La Mansión de los Streamers de Westcol. Mira quién está en peligro y quién lidera el ranking." />
+  <meta property="og:image" content="https://i.imgur.com/KtdMrMY.png" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:title" content="La Mansión - Votación en Vivo | Westcol" />
+  <meta property="twitter:description"
+    content="Sigue la votación en tiempo real de La Mansión de los Streamers de Westcol. Mira quién está en peligro y quién lidera el ranking." />
+  <meta property="twitter:image" content="https://i.imgur.com/KtdMrMY.png" />
+
+  <link rel="canonical" href="https://lamansion.westcol.io/" />
+
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "La Mansión de los Streamers",
+        "url": "https://lamansionlivevotos.vercel.app/",
+        "description": "Votación en vivo y ranking de La Mansión de los Streamers de Westcol.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://lamansionlivevotos.vercel.app/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
