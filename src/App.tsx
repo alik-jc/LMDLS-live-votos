@@ -12,7 +12,7 @@ import { ParticipantsGrid } from './components/ParticipantsGrid';
 import { findLowest, getGender } from './utils/helpers';
 import { enrichCandidateData } from './utils/enrichment';
 import type { Candidate, FilterType, VotesData } from './types';
-import { Trophy } from 'lucide-react';
+import { Trophy, Maximize2, Minimize2 } from 'lucide-react';
 
 const FILTER_CACHE_KEY = 'mansion_filter_preference';
 const THEME_CACHE_KEY = 'mansion_theme_preference';
@@ -21,6 +21,7 @@ function App() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [filteredCandidates, setFilteredCandidates] = useState<Candidate[]>([]);
   const [dangerList, setDangerList] = useState<string[]>([]);
+  const [isTheaterMode, setIsTheaterMode] = useState(false);
 
   // Theme State
   const [theme, setTheme] = useState('dark');
@@ -253,9 +254,12 @@ function App() {
       <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 ${isVotingPaused && !isNoVotingState ? 'mt-8' : ''}`}>
 
         {/* HERO / STATS HEADER - Always visible */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12 animate-in fade-in slide-in-from-bottom-2">
-          <div className="space-y-6">
-            <div className="space-y-3">
+        <div className={`grid gap-8 mb-12 animate-in fade-in slide-in-from-bottom-2 transition-all duration-500 ${isTheaterMode ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'
+          }`}>
+
+          {/* Left Column (Stats/Info) - Order changes in theater mode */}
+          <div className={`space-y-6 ${isTheaterMode ? 'order-2 flex flex-col items-center text-center' : 'order-1'}`}>
+            <div className={`space-y-3 ${isTheaterMode ? 'flex flex-col items-center' : ''}`}>
               <div className="flex items-center gap-2 mb-2">
                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${isDark ? 'bg-[#8c3034]/20 border-[#8c3034]/30 text-[#f8e2bb]' : 'bg-[#8c3034] text-white border-[#8c3034]'
                   }`}>
@@ -288,17 +292,41 @@ function App() {
               )}
             </div>
 
-            <StatsPanel
-              totalVotes={totalVotes}
-              totalCandidates={candidates.length}
-              countdown={countdown}
-              isDark={isDark}
-              showVotes={!isNoVotingState}
-              showCountdown={!isNoVotingState}
-            />
+            {/* In theater mode, we might want to display stats differently or keep them here */}
+            <div className={isTheaterMode ? "w-full max-w-3xl flex justify-center" : ""}>
+              <StatsPanel
+                totalVotes={totalVotes}
+                totalCandidates={candidates.length}
+                countdown={countdown}
+                isDark={isDark}
+                showVotes={!isNoVotingState}
+                showCountdown={!isNoVotingState}
+              />
+            </div>
+
           </div>
 
-          <div className="w-full">
+          {/* Right Column (Player) - Order changes in theater mode */}
+          <div className={`w-full ${isTheaterMode ? 'order-1' : 'order-2'}`}>
+            <div className="flex justify-end mb-2">
+              <button
+                onClick={() => setIsTheaterMode(!isTheaterMode)}
+                className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${isDark
+                  ? 'bg-white/5 hover:bg-white/10 text-gray-300 border border-white/10'
+                  : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200'
+                  }`}
+              >
+                {isTheaterMode ? (
+                  <>
+                    <Minimize2 size={14} /> Salir de Teatro
+                  </>
+                ) : (
+                  <>
+                    <Maximize2 size={14} /> Modo Teatro
+                  </>
+                )}
+              </button>
+            </div>
             <KickPlayer
               channelSlug={CHANNEL_SLUG}
               isDark={isDark}

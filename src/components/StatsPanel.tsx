@@ -21,7 +21,7 @@ export const StatsPanel = ({ totalVotes, totalCandidates, countdown, isDark, sho
     };
 
     return (
-        <div className="grid grid-cols-3 gap-2 w-full lg:w-auto sm:flex sm:flex-row sm:gap-4">
+        <div className="flex justify-center gap-2 w-full lg:w-auto sm:gap-4">
             {/* Card 1 */}
             {showVotes && (
                 <div className={`flex-1 min-w-0 p-2 sm:p-5 rounded-lg text-center ${styles.cardBg}`}>
