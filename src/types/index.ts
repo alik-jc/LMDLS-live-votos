@@ -8,6 +8,7 @@ export interface Candidate {
         tiktok?: string;
         twitch?: string;
         kick?: string;
+        of?: string;
     };
     isLive?: boolean;
     livePlatform?: 'tiktok' | 'twitch' | 'kick' | 'instagram';

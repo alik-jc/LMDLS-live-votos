@@ -27,8 +27,8 @@ export const ParticipantsGrid = ({ candidates, isDark }: ParticipantsGridProps) 
                     {/* Live Badge */}
                     {candidate.isLive && (
                         <div className={`absolute top-3 right-3 z-10 flex items-center gap-1 px-2 py-0.5 rounded-full animate-pulse shadow-lg text-[10px] font-bold ${candidate.livePlatform === 'kick' ? 'bg-[#53fc18] text-black shadow-[#53fc18]/20' :
-                                candidate.livePlatform === 'tiktok' ? 'bg-[#ff0050] text-white shadow-[#ff0050]/20' :
-                                    'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-purple-500/20'
+                            candidate.livePlatform === 'tiktok' ? 'bg-[#ff0050] text-white shadow-[#ff0050]/20' :
+                                'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-purple-500/20'
                             }`}>
                             <span className="w-1.5 h-1.5 bg-current rounded-full"></span>
                             LIVE
@@ -73,6 +73,19 @@ export const ParticipantsGrid = ({ candidates, isDark }: ParticipantsGridProps) 
                                     </svg>
                                 </a>
                             )}
+                            {candidate.socials?.of && (
+                                <a
+                                    href={`https://onlyfans.com/${candidate.socials.of}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`p-1.5 rounded-full transition-colors ${isDark ? 'bg-white/5 hover:bg-[#00aff0]/20 text-gray-400 hover:text-[#00aff0]' : 'bg-gray-100 hover:bg-[#00aff0]/20 text-gray-500 hover:text-[#00aff0]'}`}
+                                    title="OnlyFans"
+                                >
+                                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                                        <path d="M21.434 17.318a4.5 4.5 0 0 0-1.123-8.324c.03-.22.045-.445.045-.672a6.75 6.75 0 0 0-13.5 0c0 .227.015.45.045.672a4.5 4.5 0 0 0-1.123 8.324A1.125 1.125 0 0 0 6.75 18h10.5a1.125 1.125 0 0 0 4.184-.682ZM12 13.5a2.25 2.25 0 1 1 0-4.5 2.25 2.25 0 0 1 0 4.5Z" />
+                                    </svg>
+                                </a>
+                            )}
                             {candidate.socials?.instagram && (
                                 <a
                                     href={`https://instagram.com/${candidate.socials.instagram}`}
@@ -96,7 +109,7 @@ export const ParticipantsGrid = ({ candidates, isDark }: ParticipantsGridProps) 
                                 </a>
                             )}
                             {/* Fallback/Generic Link if needed */}
-                            {!candidate.socials?.instagram && !candidate.socials?.tiktok && !candidate.socials?.kick && (
+                            {!candidate.socials?.instagram && !candidate.socials?.tiktok && !candidate.socials?.kick && !candidate.socials?.of && (
                                 <span className="text-[10px] text-gray-500 italic">Sin redes</span>
                             )}
                         </div>
