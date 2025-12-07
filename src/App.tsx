@@ -41,12 +41,20 @@ function App() {
     candidatesList.sort((a, b) => b.votes - a.votes);
 
     const total = candidatesList.reduce((sum, c) => sum + c.votes, 0);
-    const averageVotes = total / candidatesList.length;
+
+    // Calculate Standard Deviation
+    const mean = total / candidatesList.length;
+    const variance = candidatesList.reduce((sum, c) => sum + Math.pow(c.votes - mean, 2), 0) / candidatesList.length;
+    const stdDev = Math.sqrt(variance);
+    const threshold = mean + stdDev; // Threshold is Mean + 1 Standard Deviation
 
     const withPercentage = candidatesList.map((c) => {
       let botPercentage = '0';
-      if (c.votes > averageVotes) {
-        botPercentage = (((c.votes - averageVotes) / c.votes) * 100).toFixed(1);
+
+      // Only flag if votes exceed the threshold (Mean + SD)
+      if (c.votes > threshold) {
+        const suspiciousVotes = c.votes - threshold;
+        botPercentage = ((suspiciousVotes / c.votes) * 100).toFixed(1);
       }
 
       return {

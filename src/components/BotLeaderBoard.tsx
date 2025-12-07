@@ -16,7 +16,7 @@ export const BotLeaderBoard = ({ candidates }: BotLeaderBoardProps) => {
                         Participantes con votos inusualmente altos respecto al promedio.
                     </div>
                     <div className="text-xs text-gray-500 mt-1 italic">
-                        * Este porcentaje es una estimación basada en la desviación del promedio. Indica la probabilidad de <strong>votos automatizados</strong> (bots).
+                        * Este porcentaje se calcula usando la <strong>Desviación Estándar</strong>. Solo se marcan votos que exceden significativamente el rango normal de popularidad, protegiendo el voto orgánico de comunidades.
                     </div>
                 </div>
             </div>
