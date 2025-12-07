@@ -17,7 +17,7 @@ export const Header = () => {
 
             <div className="flex gap-3 flex-wrap justify-center">
                 <a
-                    href="https://app.rankedvote.co/rv/lamansiondia4/vote"
+                    href={import.meta.env.VITE_VOTE_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-white bg-gradient-to-br from-purple-600 to-indigo-600 shadow-[0_4px_20px_rgba(124,58,237,0.3)] border border-white/10 transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_25px_rgba(124,58,237,0.5)]"
