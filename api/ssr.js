@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     const pageContext = await renderPage(pageContextInit)
     const { httpResponse } = pageContext
     if (!httpResponse) {
-        res.statusCode = 200
+        res.statusCode = 404
         res.end()
         return
     }
