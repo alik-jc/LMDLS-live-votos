@@ -25,6 +25,9 @@ function App() {
   const [countdown, setCountdown] = useState('--:--');
   const [loading, setLoading] = useState(true);
 
+  const isVotingPaused = import.meta.env.VITE_VOTING_PAUSED === 'true';
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const CACHE_KEY = 'mansion_votes_data';
   const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
@@ -77,8 +80,10 @@ function App() {
   };
 
   const fetchData = async () => {
+    if (isVotingPaused) return;
+
     try {
-      const targetUrl = 'https://app.rankedvote.co/api/settings/rv/lamansiondia4';
+      const targetUrl = apiUrl;
       const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl + '?_=' + Date.now());
       const response = await fetch(proxyUrl, { cache: 'no-store' });
 
@@ -119,12 +124,14 @@ function App() {
       }
     }
 
-    if (shouldFetch) {
+    if (shouldFetch && !isVotingPaused) {
       fetchData();
     }
 
     let lastFetchMinute = -1;
     const interval = setInterval(() => {
+      if (isVotingPaused) return;
+
       const now = new Date();
       const min = now.getMinutes();
       const sec = now.getSeconds();
@@ -142,7 +149,7 @@ function App() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isVotingPaused]);
 
   // Apply Filter & Save Preference
   useEffect(() => {
@@ -173,38 +180,46 @@ function App() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-5 py-8">
-      <Header />
-
-      <StatsPanel
-        totalVotes={totalVotes}
-        totalCandidates={candidates.length}
-        countdown={countdown}
-      />
-
-      <DangerZone candidates={dangerCandidates} />
-
-      <BotLeaderBoard candidates={botCandidates} />
-
-      <div className="mb-4 flex justify-between items-center flex-wrap gap-4">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">🏆</span>
-          <span className="font-bold text-lg">Ranking General</span>
+    <div className="min-h-screen bg-bg-color text-text-color font-sans p-4 md:p-8">
+      {isVotingPaused && (
+        <div className="fixed top-0 left-0 w-full bg-yellow-500/90 text-black font-bold text-center py-3 z-50 backdrop-blur-sm shadow-lg animate-pulse">
+          ⛔ VOTACIONES CERRADAS: Los resultados ya han sido revelados en el stream.
         </div>
-        <FilterButtons
-          currentFilter={currentFilter}
-          onFilterChange={setCurrentFilter}
+      )}
+
+      <div className={`max-w-6xl mx-auto ${isVotingPaused ? 'mt-12' : ''}`}>
+        <Header />
+
+        <StatsPanel
+          totalVotes={totalVotes}
+          totalCandidates={candidates.length}
+          countdown={countdown}
         />
-      </div>
 
-      <LeaderBoard
-        candidates={filteredCandidates}
-        dangerList={dangerList}
-        maxVotes={maxVotes}
-      />
+        <DangerZone candidates={dangerCandidates} />
 
-      <div className="text-center mt-10 text-gray-400 text-sm">
-        Actualizado automáticamente. <span>{lastFetchTime}</span>
+        <BotLeaderBoard candidates={botCandidates} />
+
+        <div className="mb-4 flex justify-between items-center flex-wrap gap-4">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🏆</span>
+            <span className="font-bold text-lg">Ranking General</span>
+          </div>
+          <FilterButtons
+            currentFilter={currentFilter}
+            onFilterChange={setCurrentFilter}
+          />
+        </div>
+
+        <LeaderBoard
+          candidates={filteredCandidates}
+          dangerList={dangerList}
+          maxVotes={maxVotes}
+        />
+
+        <div className="text-center mt-10 text-gray-400 text-sm">
+          Actualizado automáticamente. <span>{lastFetchTime}</span>
+        </div>
       </div>
     </div>
   );
