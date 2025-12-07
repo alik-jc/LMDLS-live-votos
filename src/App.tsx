@@ -5,6 +5,7 @@ import { DangerZone } from './components/DangerZone';
 import { FilterButtons } from './components/FilterButtons';
 import { LeaderBoard } from './components/LeaderBoard';
 import { BotLeaderBoard } from './components/BotLeaderBoard';
+import { VersionChecker } from './components/VersionChecker';
 import { findLowest, getGender } from './utils/helpers';
 import type { Candidate, FilterType, VotesData } from './types';
 
@@ -184,6 +185,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-bg-color text-text-color font-sans p-4 md:p-8">
+      <VersionChecker />
       {isVotingPaused && (
         <div className="fixed top-0 left-0 w-full bg-yellow-500/90 text-black font-bold text-center py-3 z-50 backdrop-blur-sm shadow-lg animate-pulse">
           ⛔ VOTACIONES CERRADAS: Los resultados ya han sido revelados en el stream.
