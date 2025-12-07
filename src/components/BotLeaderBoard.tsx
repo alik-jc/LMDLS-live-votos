@@ -16,7 +16,7 @@ export const BotLeaderBoard = ({ candidates }: BotLeaderBoardProps) => {
                         Participantes con votos inusualmente altos respecto al promedio.
                     </div>
                     <div className="text-xs text-gray-500 mt-1 italic">
-                        * Este porcentaje es una estimación basada en la desviación del promedio. No confirma el uso de bots, solo indica probabilidad estadística.
+                        * Este porcentaje es una estimación basada en la desviación del promedio. Indica la probabilidad de <strong>votos automatizados</strong> (bots).
                     </div>
                 </div>
             </div>
