@@ -3,7 +3,7 @@ export const GENDER_MAP: Record<string, 'M' | 'F'> = {
     'Ness': 'F',
     'Alejandra Buitrago': 'F',
     'Cami Pulgarin': 'F',
-    'Natalia Es mejor': 'F',
+    'Natalia Es Mejor': 'F',
     'Andyysuz': 'F',
     'La Piquiña': 'M',
     'Karen Orozco': 'F',
@@ -17,8 +17,11 @@ export const GENDER_MAP: Record<string, 'M' | 'F'> = {
     'El Domi': 'M',
     'Male': 'F',
     'Soy Frezo': 'M',
+    'SoyFrezo': 'M',
+    'SoyFreso': 'M',
     'KingLuiz': 'M',
     'Pesque': 'M',
+    'Soy Freso': 'M',
 };
 
 // URLs optimizadas con CDN i0.wp
