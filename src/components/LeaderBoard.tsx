@@ -1,7 +1,8 @@
 import React from 'react';
-import { Users, TrendingUp } from 'lucide-react';
+import { Users, TrendingUp, Instagram, Twitter, Facebook, Youtube, Twitch } from 'lucide-react';
 import type { Candidate } from '../types';
 import { getAvatar } from '../utils/helpers';
+import { SOCIAL_MAP, KICK_ICON } from '../utils/constants';
 
 interface LeaderBoardProps {
     candidates: Candidate[];
@@ -101,6 +102,42 @@ export const LeaderBoard: React.FC<LeaderBoardProps> = ({ candidates, dangerList
                                             {style.label}
                                         </span>
                                     )}
+                                    <div className="flex gap-1 mt-1">
+                                        {SOCIAL_MAP[row.name]?.map((social) => {
+                                            const iconProps = { size: 12, className: isDark ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-black' };
+                                            switch (social.platform) {
+                                                case 'instagram': return <a key={social.platform} href={social.url} target="_blank" rel="noopener noreferrer"><Instagram {...iconProps} /></a>;
+                                                case 'twitter': return <a key={social.platform} href={social.url} target="_blank" rel="noopener noreferrer"><Twitter {...iconProps} /></a>;
+                                                case 'facebook': return <a key={social.platform} href={social.url} target="_blank" rel="noopener noreferrer"><Facebook {...iconProps} /></a>;
+                                                case 'youtube': return <a key={social.platform} href={social.url} target="_blank" rel="noopener noreferrer"><Youtube {...iconProps} /></a>;
+                                                case 'twitch': return <a key={social.platform} href={social.url} target="_blank" rel="noopener noreferrer"><Twitch {...iconProps} /></a>;
+                                                case 'kick': return (
+                                                    <a key={social.platform} href={social.url} target="_blank" rel="noopener noreferrer">
+                                                        <img src={KICK_ICON} alt="Kick" className={`w-3 h-3 opacity-60 hover:opacity-100 transition-opacity ${isDark ? 'invert' : ''}`} />
+                                                    </a>
+                                                );
+                                                case 'tiktok': return (
+                                                    <a key={social.platform} href={social.url} target="_blank" rel="noopener noreferrer">
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="12"
+                                                            height="12"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            strokeWidth="2"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            className={iconProps.className}
+                                                        >
+                                                            <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+                                                        </svg>
+                                                    </a>
+                                                );
+                                                default: return null;
+                                            }
+                                        })}
+                                    </div>
                                 </div>
                             </div>
 
