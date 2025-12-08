@@ -124,9 +124,9 @@ function App() {
     const males = enrichedCandidates.filter(c => getGender(c.name) === 'M');
     const females = enrichedCandidates.filter(c => getGender(c.name) === 'F');
 
-    // Get bottom 2 of each gender
-    const lowestMales = males.slice(-2);
-    const lowestFemales = females.slice(-2);
+    // Get bottom 1 of each gender
+    const lowestMales = males.slice(-1);
+    const lowestFemales = females.slice(-1);
     const danger = [...lowestMales, ...lowestFemales].map((c) => c.name);
 
     setCandidates(enrichedCandidates);
