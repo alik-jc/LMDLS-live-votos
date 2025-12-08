@@ -12,7 +12,7 @@ import { ParticipantsGrid } from './components/ParticipantsGrid';
 import { findLowest, getGender } from './utils/helpers';
 import { enrichCandidateData } from './utils/enrichment';
 import type { Candidate, FilterType, VotesData } from './types';
-import { Trophy, Maximize2, Minimize2 } from 'lucide-react';
+import { Trophy, Maximize2, Minimize2, MessageSquare, MessageSquareOff, Users, Clock } from 'lucide-react';
 
 const FILTER_CACHE_KEY = 'mansion_filter_preference';
 const THEME_CACHE_KEY = 'mansion_theme_preference';
@@ -22,6 +22,7 @@ function App() {
   const [filteredCandidates, setFilteredCandidates] = useState<Candidate[]>([]);
   const [dangerList, setDangerList] = useState<string[]>([]);
   const [isTheaterMode, setIsTheaterMode] = useState(false);
+  const [showChat, setShowChat] = useState(false);
 
   // Theme State
   const [theme, setTheme] = useState('dark');
@@ -221,12 +222,16 @@ function App() {
   if (loading) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${isDark ? 'bg-[#050505]' : 'bg-gray-50'}`}>
-        <div className="w-10 h-10 border-4 border-gray-300 border-t-[#8c3034] rounded-full animate-[spin_1s_linear_infinite]" />
+        <div
+          suppressHydrationWarning
+          className="w-10 h-10 border-4 border-gray-300 border-t-[#8c3034] rounded-full animate-spin"
+        />
       </div>
     );
   }
 
   const isNoVotingState = isVotingPaused && totalVotes === 0;
+  const isActiveButNoData = !isVotingPaused && totalVotes === 0;
 
   return (
     <div className={`min-h-screen font-sans transition-colors duration-500 ${isDark ? 'bg-[#050505] text-gray-100' : 'bg-[#f8f9fa] text-gray-900'}`}>
@@ -294,21 +299,72 @@ function App() {
 
             {/* In theater mode, we might want to display stats differently or keep them here */}
             <div className={isTheaterMode ? "w-full max-w-3xl flex justify-center" : ""}>
-              <StatsPanel
-                totalVotes={totalVotes}
-                totalCandidates={candidates.length}
-                countdown={countdown}
-                isDark={isDark}
-                showVotes={!isNoVotingState}
-                showCountdown={!isNoVotingState}
-              />
+              {isActiveButNoData ? (
+                <div className="flex justify-center gap-2 w-full lg:w-auto sm:gap-4">
+                  {/* Carlangas Card */}
+                  <div className={`flex-1 min-w-0 p-2 sm:p-5 rounded-lg text-center ${isDark ? 'bg-[#111] border border-white/5' : 'bg-white border border-gray-200 shadow-sm'}`}>
+                    <div className="flex justify-center mb-1 sm:mb-2">
+                      <img
+                        src="https://i.postimg.cc/kgrWGqZm/image.png"
+                        alt="Carlangas"
+                        className="w-4 h-4 sm:w-6 sm:h-6 rounded-full border border-[#8c3034] object-cover"
+                      />
+                    </div>
+                    <p className="text-[8px] sm:text-[10px] uppercase font-bold text-gray-400 tracking-widest mb-0.5 sm:mb-1 truncate">Carlangas</p>
+                    <p className={`text-xs sm:text-sm font-light ${isDark ? 'text-white' : 'text-black'}`}>Hay votaciones activas</p>
+                    <p className={`text-xs sm:text-sm font-light ${isDark ? 'text-white' : 'text-black'}`}>Pero no hay datos</p>
+                  </div>
+
+                  {/* Participants Card */}
+                  <div className={`flex-1 min-w-0 p-2 sm:p-5 rounded-lg text-center ${isDark ? 'bg-[#111] border border-white/5' : 'bg-white border border-gray-200 shadow-sm'}`}>
+                    <div className="flex justify-center mb-1 sm:mb-2 text-gray-400"><Users size={14} className="sm:w-4 sm:h-4" /></div>
+                    <p className="text-[8px] sm:text-[10px] uppercase font-bold text-gray-400 tracking-widest mb-0.5 sm:mb-1 truncate">Participantes Activos</p>
+                    <p className={`text-lg sm:text-3xl font-light font-serif ${isDark ? 'text-white' : 'text-[#1a1a1a]'}`}>{candidates.length}</p>
+                  </div>
+
+                  {/* Countdown Card */}
+                  <div className={`flex-1 min-w-0 p-2 sm:p-5 rounded-lg text-center ${isDark ? 'bg-[#111] border border-white/5' : 'bg-white border border-gray-200 shadow-sm'}`}>
+                    <div className="flex justify-center mb-1 sm:mb-2 text-gray-400"><Clock size={14} className="sm:w-4 sm:h-4" /></div>
+                    <p className="text-[8px] sm:text-[10px] uppercase font-bold text-gray-400 tracking-widest mb-0.5 sm:mb-1 truncate">Cierre</p>
+                    <p className={`text-lg sm:text-3xl font-mono font-medium ${isDark ? 'text-[#f8e2bb]' : 'text-[#1a1a1a]'}`}>
+                      {countdown}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <StatsPanel
+                  totalVotes={totalVotes}
+                  totalCandidates={candidates.length}
+                  countdown={countdown}
+                  isDark={isDark}
+                  showVotes={!isNoVotingState}
+                  showCountdown={!isNoVotingState}
+                />
+              )}
             </div>
 
           </div>
 
           {/* Right Column (Player) - Order changes in theater mode */}
           <div className={`w-full ${isTheaterMode ? 'order-1' : 'order-2'}`}>
-            <div className="flex justify-end mb-2">
+            <div className="flex justify-end mb-2 gap-2">
+              <button
+                onClick={() => setShowChat(!showChat)}
+                className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${isDark
+                  ? 'bg-white/5 hover:bg-white/10 text-gray-300 border border-white/10'
+                  : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200'
+                  }`}
+              >
+                {showChat ? (
+                  <>
+                    <MessageSquareOff size={14} /> Ocultar Chat
+                  </>
+                ) : (
+                  <>
+                    <MessageSquare size={14} /> Mostrar Chat
+                  </>
+                )}
+              </button>
               <button
                 onClick={() => setIsTheaterMode(!isTheaterMode)}
                 className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${isDark
@@ -333,6 +389,8 @@ function App() {
               isOpen={true}
               onClose={() => { }}
               embedded={true}
+              showChat={showChat}
+              onToggleChat={() => setShowChat(!showChat)}
             />
           </div>
         </div>
@@ -340,38 +398,48 @@ function App() {
         {/* VIEW CONTENT */}
         {!isNoVotingState && currentView === 'dashboard' && (
           <>
-            <DangerZone candidates={dangerCandidates} isDark={isDark} />
-
-            <BotLeaderBoard candidates={botCandidates} isDark={isDark} />
-
-            {/* RANKING TABLE */}
-            <div className="mb-12">
-              <div className={`flex justify-between items-end mb-4 border-b pb-2 ${isDark ? 'border-white/10' : 'border-gray-100'}`}>
-                <h2 className={`text-2xl font-bold font-serif flex items-center gap-2 ${isDark ? 'text-white' : 'text-[#1a1a1a]'}`}>
-                  <Trophy size={24} className={isDark ? "text-[#f8e2bb]" : "text-[#d4af37]"} /> Ranking General
-                </h2>
-
-                <FilterButtons
-                  currentFilter={currentFilter}
-                  onFilterChange={setCurrentFilter}
-                  isDark={isDark}
-                />
+            {isActiveButNoData ? (
+              <div className="space-y-6">
+                {/* Empty state - grid hidden */}
               </div>
+            ) : (
+              <>
+                <DangerZone candidates={dangerCandidates} isDark={isDark} />
 
-              <LeaderBoard
-                candidates={filteredCandidates}
-                dangerList={dangerList}
-                isDark={isDark}
-              />
-            </div>
+                <BotLeaderBoard candidates={botCandidates} isDark={isDark} />
+
+                {/* RANKING TABLE */}
+                <div className="mb-12">
+                  <div className={`flex justify-between items-end mb-4 border-b pb-2 ${isDark ? 'border-white/10' : 'border-gray-100'}`}>
+                    <h2 className={`text-2xl font-bold font-serif flex items-center gap-2 ${isDark ? 'text-white' : 'text-[#1a1a1a]'}`}>
+                      <Trophy size={24} className={isDark ? "text-[#f8e2bb]" : "text-[#d4af37]"} /> Ranking General
+                    </h2>
+
+                    <FilterButtons
+                      currentFilter={currentFilter}
+                      onFilterChange={setCurrentFilter}
+                      isDark={isDark}
+                    />
+                  </div>
+
+                  <LeaderBoard
+                    candidates={filteredCandidates}
+                    dangerList={dangerList}
+                    isDark={isDark}
+                  />
+                </div>
+              </>
+            )}
           </>
         )}
 
         {(currentView === 'participants' || (isNoVotingState && currentView !== 'about')) && (
           <div className="space-y-6">
-            <h2 className={`text-3xl font-bold font-serif text-center mb-8 ${isDark ? 'text-white' : 'text-[#1a1a1a]'}`}>
-              Activos en La Mansión
-            </h2>
+            {!isActiveButNoData && (
+              <h2 className={`text-3xl font-bold font-serif text-center mb-8 ${isDark ? 'text-white' : 'text-[#1a1a1a]'}`}>
+                Activos en La Mansión
+              </h2>
+            )}
             <p className="text-center text-sm">En esta sección se muestran los candidatos que están activos en la votación.</p>
             <ParticipantsGrid candidates={candidates} isDark={isDark} />
           </div>

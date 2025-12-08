@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon, Github } from 'lucide-react';
 
 // Logo SVG Component
 const LogoMansion = ({ className = "w-10 h-10" }: { className?: string }) => (
@@ -64,6 +64,15 @@ export const Header = ({ isDark, toggleTheme, currentView, onNavigate }: HeaderP
 
                     {/* Actions */}
                     <div className="flex items-center gap-4">
+                        <a
+                            href="https://github.com/alik-jc/LMDLS-live-votos"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`p-2 rounded-full transition-colors ${isDark ? 'text-gray-400 hover:text-white hover:bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/20'}`}
+                            title="Ver código fuente"
+                        >
+                            <Github size={18} />
+                        </a>
                         <button
                             onClick={toggleTheme}
                             className={`p-2 rounded-full ${isDark ? 'text-yellow-400 hover:bg-white/10' : 'text-white/80 hover:bg-white/20'}`}
