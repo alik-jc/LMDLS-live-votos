@@ -51,3 +51,105 @@ export const AVATAR_MAP: Record<string, string> = {
 };
 
 export const KICK_ICON = 'https://i0.wp.com/i.imgur.com/KtdMrMY.png';
+
+export type SocialPlatform = 'instagram' | 'tiktok' | 'twitter' | 'facebook' | 'twitch' | 'kick' | 'youtube';
+
+export interface SocialMedia {
+    platform: SocialPlatform;
+    url: string;
+}
+
+export const SOCIAL_MAP: Record<string, SocialMedia[]> = {
+    'May Osorio': [
+        { platform: 'instagram', url: 'https://www.instagram.com/may_osorio25' },
+        { platform: 'tiktok', url: 'https://www.tiktok.com/@may_osorio21' }
+    ],
+    'Ness': [
+        { platform: 'instagram', url: 'https://www.instagram.com/ness.zv' },
+        { platform: 'tiktok', url: 'https://www.tiktok.com/@justnesszv' }
+    ],
+    'Alejandra Buitrago': [
+        { platform: 'instagram', url: 'https://www.instagram.com/alejandrabuitragoarias' }
+    ],
+    'Cami Pulgarin': [
+        { platform: 'instagram', url: 'https://www.instagram.com/camipulgarin' }
+    ],
+    'Natalia Es Mejor': [
+        { platform: 'instagram', url: 'https://www.instagram.com/nataliaeslamejorl' },
+        { platform: 'tiktok', url: 'https://www.tiktok.com/@nataliaeslamejorl' }
+    ],
+    'Andyysuz': [
+        { platform: 'instagram', url: 'https://www.instagram.com/andyys_suz' },
+        { platform: 'tiktok', url: 'https://www.tiktok.com/@angiesuzlives' }
+    ],
+    'La Piquiña': [
+        { platform: 'instagram', url: 'https://www.instagram.com/lapiquina_' },
+        { platform: 'kick', url: 'https://kick.com/lapiquina' }
+    ],
+    'Karen Orozco': [
+        { platform: 'instagram', url: 'https://www.instagram.com/karen_orozco_05' }
+    ],
+    'Soley': [
+        { platform: 'instagram', url: 'https://www.instagram.com/soley' },
+        { platform: 'tiktok', url: 'https://www.tiktok.com/@soleyoficial' }
+    ],
+    'Emikukis': [
+        { platform: 'instagram', url: 'https://www.instagram.com/emikukiss' },
+        { platform: 'kick', url: 'https://kick.com/emikukis' }
+    ],
+    'Ismael Sanchez': [
+        { platform: 'instagram', url: 'https://www.instagram.com/ismael_sanchez18' },
+        { platform: 'kick', url: 'https://kick.com/ismaelsanchez18' }
+    ],
+    'El Agropecuario': [
+        { platform: 'instagram', url: 'https://www.instagram.com/elreydelosagropecuarios_' },
+        { platform: 'tiktok', url: 'https://www.tiktok.com/@juandavidtejadaoficial' }
+    ],
+    'Juanda': [
+        { platform: 'instagram', url: 'https://www.instagram.com/juand4aaa' },
+        { platform: 'tiktok', url: 'https://www.tiktok.com/@juand4aaa' },
+        { platform: 'kick', url: 'https://kick.com/juand4aaa' }
+    ],
+    'El Cone': [
+        { platform: 'instagram', url: 'https://www.instagram.com/el_c0ne' },
+        { platform: 'tiktok', url: 'https://www.tiktok.com/@clips.elc0ne2' },
+        { platform: 'kick', url: 'https://kick.com/elc0ne' }
+    ],
+    'Edits De Mierda': [
+        { platform: 'instagram', url: 'https://www.instagram.com/soyedits_oficial' },
+        { platform: 'kick', url: 'https://kick.com/editsdemrd' }
+    ],
+    'El Domi': [
+        { platform: 'instagram', url: 'https://www.instagram.com/xeldomi_' },
+        { platform: 'kick', url: 'https://kick.com/eldomi' }
+    ],
+    'Male': [
+        { platform: 'instagram', url: 'https://www.instagram.com/soymale.gonzalez' },
+        { platform: 'kick', url: 'https://kick.com/soymalegonzalez' }
+    ],
+    'Soy Frezo': [
+        { platform: 'instagram', url: 'https://www.instagram.com/soyfrezo' },
+        { platform: 'kick', url: 'https://kick.com/soyfrezo' }
+    ],
+    'SoyFrezo': [
+        { platform: 'instagram', url: 'https://www.instagram.com/soyfrezo' },
+        { platform: 'kick', url: 'https://kick.com/soyfrezo' }
+    ],
+    'SoyFreso': [
+        { platform: 'instagram', url: 'https://www.instagram.com/soyfrezo' },
+        { platform: 'kick', url: 'https://kick.com/soyfrezo' }
+    ],
+    'KingLuiz': [
+        { platform: 'instagram', url: 'https://www.instagram.com/kingluiz' },
+        { platform: 'tiktok', url: 'https://www.tiktok.com/@kingluiz' }
+    ],
+    'Pesque': [
+        { platform: 'instagram', url: 'https://www.instagram.com/xpesque' },
+        { platform: 'tiktok', url: 'https://www.tiktok.com/@xpesque' },
+        { platform: 'kick', url: 'https://kick.com/pesque' }
+    ],
+    'Soy Freso': [
+        { platform: 'instagram', url: 'https://www.instagram.com/soyfrezo' },
+        { platform: 'kick', url: 'https://kick.com/soyfrezo' }
+    ],
+};
