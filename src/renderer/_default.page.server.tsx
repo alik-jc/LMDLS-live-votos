@@ -30,7 +30,7 @@ export async function render(pageContext: PageContext) {
 
   // See https://vite-plugin-ssr.com/head
   const { documentProps } = pageContext.exports;
-  const title = (documentProps && documentProps.title) || 'LMDLS: Votación en Vivo | Westcol';
+  const title = (documentProps && documentProps.title) || 'La Mansión de los Streamers | Westcol';
   const desc = (documentProps && documentProps.description) || '🔴 Votación OFICIAL en VIVO de La Mansión de los Streamers de Westcol. Consulta el ranking actualizado cada minuto, vota por tu favorito y descubre quién está en peligro de eliminación. Resultados en tiempo real 24/7.';
 
   const documentHtml = escapeInject`<!DOCTYPE html>
