@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
-import { DangerZone } from './components/DangerZone';
+import { PossibleChampions } from './components/PossibleChampions';
 import { FilterButtons } from './components/FilterButtons';
 import { LeaderBoard } from './components/LeaderBoard';
 import { VersionChecker } from './components/VersionChecker';
 import { AboutSection } from './components/AboutSection';
 import { ParticipantsGrid } from './components/ParticipantsGrid';
 import { HeroSection } from './components/HeroSection';
+import { EventFinishedLanding } from './components/EventFinishedLanding';
 import { getGender } from './utils/helpers';
 import { enrichCandidateData } from './utils/enrichment';
 import type { Candidate, FilterType, VotesData } from './types';
@@ -58,6 +59,10 @@ function App() {
 
 
   const isVotingPaused = import.meta.env.VITE_VOTING_PAUSED === 'true';
+  const isEventFinished = import.meta.env.VITE_EVENT_FINISHED === 'true';
+  const isFinal = import.meta.env.VITE_IS_FINAL === 'true';
+  const currentDay = parseInt(import.meta.env.VITE_CURRENT_DAY || '7', 10);
+  const totalDays = parseInt(import.meta.env.VITE_TOTAL_DAYS || '7', 10);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const CACHE_KEY = 'mansion_votes_data';
@@ -215,8 +220,6 @@ function App() {
     }
   }, [currentFilter, candidates]);
 
-  const dangerCandidates = candidates.filter((c) => dangerList.includes(c.name));
-
   if (loading) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${isDark ? 'bg-[#050505]' : 'bg-gray-50'}`}>
@@ -234,102 +237,123 @@ function App() {
   return (
     <div className={`min-h-screen font-sans transition-colors duration-500 ${isDark ? 'bg-[#050505] text-gray-100' : 'bg-[#f8f9fa] text-gray-900'}`}>
 
-      {/* Background Glow (Dark Mode Only) */}
-      {/* Background Glow (Dark Mode Only) - Removed to match original scheme */}
-      {/* {isDark && (
-        <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[600px] bg-[#8c3034] opacity-[0.07] blur-[150px] rounded-full pointer-events-none z-0"></div>
-      )} */}
-
       <VersionChecker />
 
-      {isVotingPaused && !isNoVotingState && (
-        <div className="fixed top-0 left-0 w-full bg-blue-600/90 text-white font-bold text-center py-2 z-50 backdrop-blur-sm shadow-lg text-sm">
-          ℹ️ Esperando la próxima votación del día. Los datos se siguen actualizando.
-        </div>
-      )}
-
-      <Header
-        isDark={isDark}
-        toggleTheme={toggleTheme}
-        currentView={(isNoVotingState && currentView !== 'about') ? 'participants' : currentView}
-        onNavigate={setCurrentView}
-      />
-
-      <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 ${isVotingPaused && !isNoVotingState ? 'mt-8' : ''}`}>
-
-        {/* HERO SECTION */}
-        <HeroSection
-          timeLeft={countdown}
-          totalVotes={totalVotes}
-          activeParticipants={candidates.length}
-          isTheaterMode={isTheaterMode}
-          toggleTheaterMode={() => setIsTheaterMode(!isTheaterMode)}
-          showChat={showChat}
-          toggleChat={() => setShowChat(!showChat)}
-          isDark={isDark}
-          isNoVotingState={isNoVotingState}
-          voteUrl={import.meta.env.VITE_VOTE_URL}
-        />
-
-        {/* VIEW CONTENT */}
-        {!isNoVotingState && currentView === 'dashboard' && (
-          <>
-            {isActiveButNoData ? (
-              <div className="space-y-6">
-                {/* Empty state - grid hidden */}
+      {/* Event Finished Mode */}
+      {isEventFinished ? (
+        <>
+          <Header
+            isDark={isDark}
+            toggleTheme={toggleTheme}
+            currentView={currentView}
+            onNavigate={setCurrentView}
+          />
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+            {currentView === 'about' ? (
+              <div className="mt-16">
+                <AboutSection isDark={isDark} />
               </div>
             ) : (
+              <EventFinishedLanding isDark={isDark} />
+            )}
+          </main>
+        </>
+      ) : (
+        <>
+          {/* Active Voting Mode */}
+          {isVotingPaused && !isNoVotingState && (
+            <div className="fixed top-0 left-0 w-full bg-blue-600/90 text-white font-bold text-center py-2 z-50 backdrop-blur-sm shadow-lg text-sm">
+              ℹ️ Esperando la próxima votación del día. Los datos se siguen actualizando.
+            </div>
+          )}
+
+          <Header
+            isDark={isDark}
+            toggleTheme={toggleTheme}
+            currentView={(isNoVotingState && currentView !== 'about') ? 'participants' : currentView}
+            onNavigate={setCurrentView}
+          />
+
+          <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 ${isVotingPaused && !isNoVotingState ? 'mt-8' : ''}`}>
+
+            {/* HERO SECTION */}
+            <HeroSection
+              timeLeft={countdown}
+              totalVotes={totalVotes}
+              activeParticipants={candidates.length}
+              isTheaterMode={isTheaterMode}
+              toggleTheaterMode={() => setIsTheaterMode(!isTheaterMode)}
+              showChat={showChat}
+              toggleChat={() => setShowChat(!showChat)}
+              isDark={isDark}
+              isNoVotingState={isNoVotingState}
+              voteUrl={import.meta.env.VITE_VOTE_URL}
+              currentDay={currentDay}
+              totalDays={totalDays}
+              isFinal={isFinal}
+            />
+
+            {/* VIEW CONTENT */}
+            {!isNoVotingState && currentView === 'dashboard' && (
               <>
-                <DangerZone candidates={dangerCandidates} isDark={isDark} />
-
-                {/* RANKING TABLE */}
-                <div id="ranking" className="mt-16 mb-12 scroll-mt-24">
-                  <div className={`flex justify-between items-end mb-6 border-b pb-4 ${isDark ? 'border-white/10' : 'border-gray-100'}`}>
-                    <div className="flex items-center gap-3">
-                      <span className="text-[#f8dcb2]"><Users size={24} /></span>
-                      <h2 className={`text-2xl font-serif ${isDark ? 'text-white' : 'text-gray-900'}`}>Ranking General</h2>
-                    </div>
-
-                    <FilterButtons
-                      currentFilter={currentFilter}
-                      onFilterChange={setCurrentFilter}
-                      isDark={isDark}
-                    />
+                {isActiveButNoData ? (
+                  <div className="space-y-6">
+                    {/* Empty state - grid hidden */}
                   </div>
+                ) : (
+                  <>
+                    <PossibleChampions candidates={filteredCandidates} dangerList={dangerList} isDark={isDark} />
 
-                  <LeaderBoard
-                    candidates={filteredCandidates}
-                    dangerList={dangerList}
-                    isDark={isDark}
-                  />
-                </div>
+                    {/* RANKING TABLE */}
+                    <div id="ranking" className="mt-16 mb-12 scroll-mt-24">
+                      <div className={`flex justify-between items-end mb-6 border-b pb-4 ${isDark ? 'border-white/10' : 'border-gray-100'}`}>
+                        <div className="flex items-center gap-3">
+                          <span className="text-[#f8dcb2]"><Users size={24} /></span>
+                          <h2 className={`text-2xl font-serif ${isDark ? 'text-white' : 'text-gray-900'}`}>Ranking General</h2>
+                        </div>
+
+                        <FilterButtons
+                          currentFilter={currentFilter}
+                          onFilterChange={setCurrentFilter}
+                          isDark={isDark}
+                        />
+                      </div>
+
+                      <LeaderBoard
+                        candidates={filteredCandidates}
+                        dangerList={dangerList}
+                        isDark={isDark}
+                      />
+                    </div>
+                  </>
+                )}
               </>
             )}
-          </>
-        )}
 
-        {(currentView === 'participants' || (isNoVotingState && currentView !== 'about')) && (
-          <div className="space-y-6 mt-12">
-            {!isActiveButNoData && (
-              <h2 className={`text-3xl font-bold font-serif text-center mb-8 ${isDark ? 'text-white' : 'text-[#1a1a1a]'}`}>
-                Activos en La Mansión
-              </h2>
+            {(currentView === 'participants' || (isNoVotingState && currentView !== 'about')) && (
+              <div className="space-y-6 mt-12">
+                {!isActiveButNoData && (
+                  <h2 className={`text-3xl font-bold font-serif text-center mb-8 ${isDark ? 'text-white' : 'text-[#1a1a1a]'}`}>
+                    Activos en La Mansión
+                  </h2>
+                )}
+                <p className="text-center text-sm">En esta sección se muestran los candidatos que están activos en la votación.</p>
+                <ParticipantsGrid candidates={candidates} isDark={isDark} />
+              </div>
             )}
-            <p className="text-center text-sm">En esta sección se muestran los candidatos que están activos en la votación.</p>
-            <ParticipantsGrid candidates={candidates} isDark={isDark} />
-          </div>
-        )}
 
-        {currentView === 'about' && (
-          <div className="mt-16">
-            <AboutSection isDark={isDark} />
-          </div>
-        )}
+            {currentView === 'about' && (
+              <div className="mt-16">
+                <AboutSection isDark={isDark} />
+              </div>
+            )}
 
-        <div className="text-center mt-10 text-gray-400 text-sm">
-          Actualizado automáticamente. <span>{lastFetchTime}</span>
-        </div>
-      </main>
+            <div className="text-center mt-10 text-gray-400 text-sm">
+              Actualizado automáticamente. <span>{lastFetchTime}</span>
+            </div>
+          </main>
+        </>
+      )}
     </div>
   );
 }

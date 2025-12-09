@@ -3,6 +3,8 @@ export interface Candidate {
     votes: number;
     percentage?: string;
     botPercentage?: string;
+    gender?: 'M' | 'F';
+    eliminated?: boolean;
     socials?: {
         instagram?: string;
         tiktok?: string;

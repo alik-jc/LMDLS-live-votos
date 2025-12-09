@@ -1,5 +1,5 @@
-import React from 'react';
-import { Users, Activity, Clock, MessageSquare, Maximize2, Minimize2, MessageSquareOff } from 'lucide-react';
+import React, { useState } from 'react';
+import { Users, Activity, Clock, MessageSquare, Maximize2, Minimize2, MessageSquareOff, Play, X } from 'lucide-react';
 import { KickPlayer } from './KickPlayer';
 
 interface HeroSectionProps {
@@ -13,6 +13,10 @@ interface HeroSectionProps {
     isDark: boolean;
     isNoVotingState: boolean;
     voteUrl: string;
+    // Event configuration
+    currentDay: number;
+    totalDays: number;
+    isFinal: boolean;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
@@ -25,8 +29,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     toggleChat,
     isDark,
     isNoVotingState,
-    voteUrl
+    voteUrl,
+    currentDay,
+    totalDays,
+    isFinal
 }) => {
+    const [showStream, setShowStream] = useState(false);
+
     const StatsGrid = () => (
         <div className={`grid grid-cols-3 gap-4 mt-8 border-t pt-6 ${isDark ? 'border-white/5' : 'border-gray-200'}`}>
             <div className={`p-4 rounded-lg border text-center group transition-colors ${isDark ? 'bg-[#111] border-white/5 hover:border-red-900/30' : 'bg-white border-gray-200'}`}>
@@ -55,20 +64,61 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {!isTheaterMode && (
                 <div className="lg:col-span-5 flex flex-col justify-center space-y-6">
                     <div className="flex items-center gap-2 mb-2">
-                        <span className="bg-[#8c3034] text-white text-xs font-bold px-3 py-1 rounded border border-[#8c3034] animate-pulse shadow-lg">
-                            DÍA 6
+                        {isFinal ? (
+                            <span className="bg-gradient-to-r from-[#ffd700] to-[#ffaa00] text-black text-xs font-bold px-3 py-1 rounded border border-[#ffd700] animate-pulse shadow-lg">
+                                🏆 GRAN FINAL
+                            </span>
+                        ) : (
+                            <span className="bg-[#8c3034] text-white text-xs font-bold px-3 py-1 rounded animate-pulse shadow-lg">
+                                🔴 EN VIVO
+                            </span>
+                        )}
+                        <span className={`text-white text-xs font-bold px-2 py-1 rounded ${isFinal ? 'bg-[#8c3034]' : 'bg-[#333]'}`}>
+                            DÍA {currentDay}{currentDay === totalDays ? ' (FINAL)' : ` / ${totalDays}`}
                         </span>
-                        <span className="text-gray-400 text-xs uppercase tracking-wider">• {isNoVotingState ? 'Votación Finalizada' : 'Votación en tiempo real'}</span>
+                        <span className="text-gray-400 text-xs uppercase tracking-wider">• {isNoVotingState ? 'Votación Finalizada' : 'Universidad de Streaming'}</span>
                     </div>
 
                     <div>
-                        <h1 className={`text-3xl md:text-6xl font-serif mb-2 leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                            {isNoVotingState ? 'Votación' : 'Eliminación'} <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-500">
-                                {isNoVotingState ? 'Finalizada' : 'en Proceso'}
-                            </span>
+                        <h1 className={`text-3xl md:text-5xl font-serif mb-2 leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            {isNoVotingState ? (
+                                <>
+                                    Votación<br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-500">
+                                        Finalizada
+                                    </span>
+                                </>
+                            ) : isFinal ? (
+                                <>
+                                    El Rey y la Reina<br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ffd700] to-[#ffaa00]">
+                                        de La Mansión
+                                    </span>
+                                </>
+                            ) : (
+                                <>
+                                    Eliminación<br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-500">
+                                        en Proceso
+                                    </span>
+                                </>
+                            )}
                         </h1>
-                        <p className="text-gray-500 italic text-sm border-l-2 border-[#8c3034] pl-3 mt-4">
+                        <p className={`text-sm mt-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            {isFinal ? (
+                                <>
+                                    La primera Universidad de Streaming en Latinoamérica llega a su fin.
+                                    Después de {totalDays} días de convivencia, retos y eliminaciones,
+                                    <strong> hoy se decide quién será coronado.</strong>
+                                </>
+                            ) : (
+                                <>
+                                    Universidad de Streaming en Latinoamérica.
+                                    Día {currentDay} de {totalDays} días de convivencia, retos y eliminaciones.
+                                </>
+                            )}
+                        </p>
+                        <p className={`text-gray-500 italic text-xs border-l-2 ${isFinal ? 'border-[#ffd700]' : 'border-[#8c3034]'} pl-3 mt-3`}>
                             *Los resultados pueden variar por decisión de producción.
                         </p>
                     </div>
@@ -99,32 +149,60 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             {/* Right Column: Video Embed */}
             <div className={`${isTheaterMode ? 'col-span-12' : 'lg:col-span-7'}`}>
-                <div className={`relative aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border group ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
-                    <div className="absolute top-4 right-4 z-20 flex gap-2">
-                        <button
-                            onClick={toggleChat}
-                            className="bg-black/60 backdrop-blur text-xs font-bold text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-black/80 transition"
-                        >
-                            {showChat ? <><MessageSquareOff size={14} /> OCULTAR CHAT</> : <><MessageSquare size={14} /> MOSTRAR CHAT</>}
-                        </button>
-                        <button
-                            onClick={toggleTheaterMode}
-                            className="bg-black/60 backdrop-blur text-xs font-bold text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-black/80 transition"
-                        >
-                            {isTheaterMode ? <><Minimize2 size={14} /> SALIR MODO TEATRO</> : <><Maximize2 size={14} /> MODO TEATRO</>}
-                        </button>
-                    </div>
+                {showStream ? (
+                    <div className={`relative aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border group ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
+                        <div className="absolute top-4 right-4 z-20 flex gap-2">
+                            <button
+                                onClick={() => setShowStream(false)}
+                                className="bg-black/60 backdrop-blur text-xs font-bold text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-black/80 transition"
+                            >
+                                <X size={14} /> CERRAR
+                            </button>
+                            <button
+                                onClick={toggleChat}
+                                className="bg-black/60 backdrop-blur text-xs font-bold text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-black/80 transition"
+                            >
+                                {showChat ? <><MessageSquareOff size={14} /> OCULTAR CHAT</> : <><MessageSquare size={14} /> MOSTRAR CHAT</>}
+                            </button>
+                            <button
+                                onClick={toggleTheaterMode}
+                                className="bg-black/60 backdrop-blur text-xs font-bold text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-black/80 transition"
+                            >
+                                {isTheaterMode ? <><Minimize2 size={14} /> SALIR MODO TEATRO</> : <><Maximize2 size={14} /> MODO TEATRO</>}
+                            </button>
+                        </div>
 
-                    <KickPlayer
-                        channelSlug="westcol"
-                        isDark={isDark}
-                        isOpen={true}
-                        onClose={() => { }}
-                        embedded={true}
-                        showChat={showChat}
-                        onToggleChat={toggleChat}
-                    />
-                </div>
+                        <KickPlayer
+                            channelSlug="westcol"
+                            isDark={isDark}
+                            isOpen={true}
+                            onClose={() => setShowStream(false)}
+                            embedded={true}
+                            showChat={showChat}
+                            onToggleChat={toggleChat}
+                        />
+                    </div>
+                ) : (
+                    <div className={`relative aspect-video rounded-xl overflow-hidden shadow-2xl border flex flex-col items-center justify-center ${isDark ? 'bg-[#111] border-white/10' : 'bg-white border-gray-200'}`}>
+                        <div className="text-center p-8">
+                            <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${isDark ? 'bg-[#8c3034]/20' : 'bg-[#8c3034]/10'}`}>
+                                <Play size={32} className="text-[#8c3034] ml-1" />
+                            </div>
+                            <h3 className={`text-xl font-serif mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                Transmisión en Vivo
+                            </h3>
+                            <p className={`text-sm mb-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                Mira la transmisión de La Mansión en Kick
+                            </p>
+                            <button
+                                onClick={() => setShowStream(true)}
+                                className="bg-[#8c3034] hover:bg-[#70262a] text-white font-bold py-3 px-6 rounded shadow-lg transition-all transform hover:scale-105 uppercase tracking-widest text-sm flex items-center gap-2 mx-auto"
+                            >
+                                <Play size={16} /> Ver Stream
+                            </button>
+                        </div>
+                    </div>
+                )}
 
                 {/* Stats Grid - Theater Mode */}
                 {isTheaterMode && (

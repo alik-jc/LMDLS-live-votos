@@ -34,7 +34,7 @@ export const AVATAR_MAP: Record<string, string> = {
     'Juanda': `${CDN_PREFIX}h6rIkXEt.png`,
     'La Piquiña': `${CDN_PREFIX}RrVhcUZt.png`,
     'KingLuiz': `${CDN_PREFIX}qQOy7Cmt.png`,
-    'SoyFrezo': `${CDN_PREFIX}JvQNhAUt.png`,
+    'Soy Frezo': `${CDN_PREFIX}JvQNhAUt.png`,
     'El Agropecuario': `${CDN_PREFIX}NncLW7Et.png`,
     'El Domi': `${CDN_PREFIX}yon3rMZt.png`,
     'Ness': `${CDN_PREFIX}3UZmzBlt.png`,
