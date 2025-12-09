@@ -92,7 +92,7 @@ export const EventFinishedLanding = ({ isDark }: EventFinishedLandingProps) => {
                 </div>
 
                 <p className={`text-lg leading-relaxed mb-6 ${styles.textSecondary}`}>
-                    <strong className={styles.textPrimary}>La Mansión de los Streamers</strong> fue el proyecto más ambicioso del streaming latinoamericano, creado por <span className="font-bold">{EVENT_INFO.creator}</span>. Un experimento social donde creadores de contenido convivieron 24/7 bajo el mismo techo, enfrentando desafíos, eliminaciones y la convivencia diaria.
+                    <strong className={styles.textPrimary}>La Mansión de los Streamers</strong> fue la primera <span className="font-bold">Universidad de Streaming</span> en Latinoamérica, creada por <span className="font-bold">{EVENT_INFO.creator}</span>. {EVENT_INFO.totalParticipants} creadores de contenido convivieron durante {EVENT_INFO.totalDays} días, aprendiendo, compitiendo y enfrentando eliminaciones decididas por el público.
                 </p>
 
                 <div className="grid md:grid-cols-3 gap-4">
@@ -144,7 +144,7 @@ export const EventFinishedLanding = ({ isDark }: EventFinishedLandingProps) => {
                 <Tv className={`mx-auto mb-4 ${styles.accent}`} size={32} />
                 <h2 className={`text-2xl font-serif mb-2 ${styles.textPrimary}`}>¿Dónde se transmitió?</h2>
                 <p className={`mb-6 ${styles.textSecondary}`}>
-                    Todo el evento fue transmitido en vivo las 24 horas del día en Kick.
+                    Todo el evento fue transmitido en Kick con streams diarios de hasta 10 horas.
                 </p>
                 <a
                     href={EVENT_INFO.platform.url}

@@ -13,6 +13,10 @@ interface HeroSectionProps {
     isDark: boolean;
     isNoVotingState: boolean;
     voteUrl: string;
+    // Event configuration
+    currentDay: number;
+    totalDays: number;
+    isFinal: boolean;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
@@ -25,7 +29,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     toggleChat,
     isDark,
     isNoVotingState,
-    voteUrl
+    voteUrl,
+    currentDay,
+    totalDays,
+    isFinal
 }) => {
     const [showStream, setShowStream] = useState(false);
 
@@ -57,20 +64,61 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {!isTheaterMode && (
                 <div className="lg:col-span-5 flex flex-col justify-center space-y-6">
                     <div className="flex items-center gap-2 mb-2">
-                        <span className="bg-gradient-to-r from-[#8c3034] to-[#c45a5e] text-white text-xs font-bold px-3 py-1 rounded border border-[#8c3034] animate-pulse shadow-lg">
-                            🏆 DÍA 7 • FINAL
+                        {isFinal ? (
+                            <span className="bg-gradient-to-r from-[#ffd700] to-[#ffaa00] text-black text-xs font-bold px-3 py-1 rounded border border-[#ffd700] animate-pulse shadow-lg">
+                                🏆 GRAN FINAL
+                            </span>
+                        ) : (
+                            <span className="bg-[#8c3034] text-white text-xs font-bold px-3 py-1 rounded animate-pulse shadow-lg">
+                                🔴 EN VIVO
+                            </span>
+                        )}
+                        <span className={`text-white text-xs font-bold px-2 py-1 rounded ${isFinal ? 'bg-[#8c3034]' : 'bg-[#333]'}`}>
+                            DÍA {currentDay}{currentDay === totalDays ? ' (FINAL)' : ` / ${totalDays}`}
                         </span>
-                        <span className="text-gray-400 text-xs uppercase tracking-wider">• {isNoVotingState ? 'Votación Finalizada' : 'Votación en tiempo real'}</span>
+                        <span className="text-gray-400 text-xs uppercase tracking-wider">• {isNoVotingState ? 'Votación Finalizada' : 'Universidad de Streaming'}</span>
                     </div>
 
                     <div>
-                        <h1 className={`text-3xl md:text-6xl font-serif mb-2 leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                            {isNoVotingState ? 'Votación' : 'Eliminación'} <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-500">
-                                {isNoVotingState ? 'Finalizada' : 'en Proceso'}
-                            </span>
+                        <h1 className={`text-3xl md:text-5xl font-serif mb-2 leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                            {isNoVotingState ? (
+                                <>
+                                    Votación<br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-500">
+                                        Finalizada
+                                    </span>
+                                </>
+                            ) : isFinal ? (
+                                <>
+                                    El Rey y la Reina<br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ffd700] to-[#ffaa00]">
+                                        de La Mansión
+                                    </span>
+                                </>
+                            ) : (
+                                <>
+                                    Eliminación<br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-500">
+                                        en Proceso
+                                    </span>
+                                </>
+                            )}
                         </h1>
-                        <p className="text-gray-500 italic text-sm border-l-2 border-[#8c3034] pl-3 mt-4">
+                        <p className={`text-sm mt-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                            {isFinal ? (
+                                <>
+                                    La primera Universidad de Streaming en Latinoamérica llega a su fin.
+                                    Después de {totalDays} días de convivencia, retos y eliminaciones,
+                                    <strong> hoy se decide quién será coronado.</strong>
+                                </>
+                            ) : (
+                                <>
+                                    Universidad de Streaming en Latinoamérica.
+                                    Día {currentDay} de {totalDays} días de convivencia, retos y eliminaciones.
+                                </>
+                            )}
+                        </p>
+                        <p className={`text-gray-500 italic text-xs border-l-2 ${isFinal ? 'border-[#ffd700]' : 'border-[#8c3034]'} pl-3 mt-3`}>
                             *Los resultados pueden variar por decisión de producción.
                         </p>
                     </div>

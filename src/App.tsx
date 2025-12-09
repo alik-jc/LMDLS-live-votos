@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
-import { DangerZone } from './components/DangerZone';
+import { PossibleChampions } from './components/PossibleChampions';
 import { FilterButtons } from './components/FilterButtons';
 import { LeaderBoard } from './components/LeaderBoard';
 import { VersionChecker } from './components/VersionChecker';
@@ -60,6 +60,9 @@ function App() {
 
   const isVotingPaused = import.meta.env.VITE_VOTING_PAUSED === 'true';
   const isEventFinished = import.meta.env.VITE_EVENT_FINISHED === 'true';
+  const isFinal = import.meta.env.VITE_IS_FINAL === 'true';
+  const currentDay = parseInt(import.meta.env.VITE_CURRENT_DAY || '7', 10);
+  const totalDays = parseInt(import.meta.env.VITE_TOTAL_DAYS || '7', 10);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const CACHE_KEY = 'mansion_votes_data';
@@ -217,8 +220,6 @@ function App() {
     }
   }, [currentFilter, candidates]);
 
-  const dangerCandidates = candidates.filter((c) => dangerList.includes(c.name));
-
   if (loading) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${isDark ? 'bg-[#050505]' : 'bg-gray-50'}`}>
@@ -287,6 +288,9 @@ function App() {
               isDark={isDark}
               isNoVotingState={isNoVotingState}
               voteUrl={import.meta.env.VITE_VOTE_URL}
+              currentDay={currentDay}
+              totalDays={totalDays}
+              isFinal={isFinal}
             />
 
             {/* VIEW CONTENT */}
@@ -298,7 +302,7 @@ function App() {
                   </div>
                 ) : (
                   <>
-                    <DangerZone candidates={dangerCandidates} isDark={isDark} />
+                    <PossibleChampions candidates={filteredCandidates} dangerList={dangerList} isDark={isDark} />
 
                     {/* RANKING TABLE */}
                     <div id="ranking" className="mt-16 mb-12 scroll-mt-24">
