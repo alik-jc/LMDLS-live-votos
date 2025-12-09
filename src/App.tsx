@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { PossibleChampions } from './components/PossibleChampions';
+import { DangerZone } from './components/DangerZone';
 import { FilterButtons } from './components/FilterButtons';
 import { LeaderBoard } from './components/LeaderBoard';
 import { VersionChecker } from './components/VersionChecker';
@@ -302,7 +303,12 @@ function App() {
                   </div>
                 ) : (
                   <>
-                    <PossibleChampions candidates={filteredCandidates} dangerList={dangerList} isDark={isDark} />
+                    {/* Show PossibleChampions only on final day, otherwise DangerZone */}
+                    {isFinal ? (
+                      <PossibleChampions candidates={filteredCandidates} dangerList={dangerList} isDark={isDark} />
+                    ) : (
+                      <DangerZone candidates={candidates.filter(c => dangerList.includes(c.name))} isDark={isDark} />
+                    )}
 
                     {/* RANKING TABLE */}
                     <div id="ranking" className="mt-16 mb-12 scroll-mt-24">
