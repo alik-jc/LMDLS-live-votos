@@ -1,5 +1,5 @@
-import React from 'react';
-import { Users, Activity, Clock, MessageSquare, Maximize2, Minimize2, MessageSquareOff } from 'lucide-react';
+import React, { useState } from 'react';
+import { Users, Activity, Clock, MessageSquare, Maximize2, Minimize2, MessageSquareOff, Play, X } from 'lucide-react';
 import { KickPlayer } from './KickPlayer';
 
 interface HeroSectionProps {
@@ -27,6 +27,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     isNoVotingState,
     voteUrl
 }) => {
+    const [showStream, setShowStream] = useState(false);
+
     const StatsGrid = () => (
         <div className={`grid grid-cols-3 gap-4 mt-8 border-t pt-6 ${isDark ? 'border-white/5' : 'border-gray-200'}`}>
             <div className={`p-4 rounded-lg border text-center group transition-colors ${isDark ? 'bg-[#111] border-white/5 hover:border-red-900/30' : 'bg-white border-gray-200'}`}>
@@ -55,8 +57,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {!isTheaterMode && (
                 <div className="lg:col-span-5 flex flex-col justify-center space-y-6">
                     <div className="flex items-center gap-2 mb-2">
-                        <span className="bg-[#8c3034] text-white text-xs font-bold px-3 py-1 rounded border border-[#8c3034] animate-pulse shadow-lg">
-                            DÍA 6
+                        <span className="bg-gradient-to-r from-[#8c3034] to-[#c45a5e] text-white text-xs font-bold px-3 py-1 rounded border border-[#8c3034] animate-pulse shadow-lg">
+                            🏆 DÍA 7 • FINAL
                         </span>
                         <span className="text-gray-400 text-xs uppercase tracking-wider">• {isNoVotingState ? 'Votación Finalizada' : 'Votación en tiempo real'}</span>
                     </div>
@@ -99,32 +101,60 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             {/* Right Column: Video Embed */}
             <div className={`${isTheaterMode ? 'col-span-12' : 'lg:col-span-7'}`}>
-                <div className={`relative aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border group ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
-                    <div className="absolute top-4 right-4 z-20 flex gap-2">
-                        <button
-                            onClick={toggleChat}
-                            className="bg-black/60 backdrop-blur text-xs font-bold text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-black/80 transition"
-                        >
-                            {showChat ? <><MessageSquareOff size={14} /> OCULTAR CHAT</> : <><MessageSquare size={14} /> MOSTRAR CHAT</>}
-                        </button>
-                        <button
-                            onClick={toggleTheaterMode}
-                            className="bg-black/60 backdrop-blur text-xs font-bold text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-black/80 transition"
-                        >
-                            {isTheaterMode ? <><Minimize2 size={14} /> SALIR MODO TEATRO</> : <><Maximize2 size={14} /> MODO TEATRO</>}
-                        </button>
-                    </div>
+                {showStream ? (
+                    <div className={`relative aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border group ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
+                        <div className="absolute top-4 right-4 z-20 flex gap-2">
+                            <button
+                                onClick={() => setShowStream(false)}
+                                className="bg-black/60 backdrop-blur text-xs font-bold text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-black/80 transition"
+                            >
+                                <X size={14} /> CERRAR
+                            </button>
+                            <button
+                                onClick={toggleChat}
+                                className="bg-black/60 backdrop-blur text-xs font-bold text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-black/80 transition"
+                            >
+                                {showChat ? <><MessageSquareOff size={14} /> OCULTAR CHAT</> : <><MessageSquare size={14} /> MOSTRAR CHAT</>}
+                            </button>
+                            <button
+                                onClick={toggleTheaterMode}
+                                className="bg-black/60 backdrop-blur text-xs font-bold text-white px-3 py-1.5 rounded flex items-center gap-2 hover:bg-black/80 transition"
+                            >
+                                {isTheaterMode ? <><Minimize2 size={14} /> SALIR MODO TEATRO</> : <><Maximize2 size={14} /> MODO TEATRO</>}
+                            </button>
+                        </div>
 
-                    <KickPlayer
-                        channelSlug="westcol"
-                        isDark={isDark}
-                        isOpen={true}
-                        onClose={() => { }}
-                        embedded={true}
-                        showChat={showChat}
-                        onToggleChat={toggleChat}
-                    />
-                </div>
+                        <KickPlayer
+                            channelSlug="westcol"
+                            isDark={isDark}
+                            isOpen={true}
+                            onClose={() => setShowStream(false)}
+                            embedded={true}
+                            showChat={showChat}
+                            onToggleChat={toggleChat}
+                        />
+                    </div>
+                ) : (
+                    <div className={`relative aspect-video rounded-xl overflow-hidden shadow-2xl border flex flex-col items-center justify-center ${isDark ? 'bg-[#111] border-white/10' : 'bg-white border-gray-200'}`}>
+                        <div className="text-center p-8">
+                            <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${isDark ? 'bg-[#8c3034]/20' : 'bg-[#8c3034]/10'}`}>
+                                <Play size={32} className="text-[#8c3034] ml-1" />
+                            </div>
+                            <h3 className={`text-xl font-serif mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                Transmisión en Vivo
+                            </h3>
+                            <p className={`text-sm mb-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                Mira la transmisión de La Mansión en Kick
+                            </p>
+                            <button
+                                onClick={() => setShowStream(true)}
+                                className="bg-[#8c3034] hover:bg-[#70262a] text-white font-bold py-3 px-6 rounded shadow-lg transition-all transform hover:scale-105 uppercase tracking-widest text-sm flex items-center gap-2 mx-auto"
+                            >
+                                <Play size={16} /> Ver Stream
+                            </button>
+                        </div>
+                    </div>
+                )}
 
                 {/* Stats Grid - Theater Mode */}
                 {isTheaterMode && (
