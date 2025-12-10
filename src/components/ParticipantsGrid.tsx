@@ -1,5 +1,5 @@
 import { Instagram, Video } from 'lucide-react';
-import { getAvatar } from '../utils/helpers';
+import { getAvatar, getDisplayName } from '../utils/helpers';
 import type { Candidate } from '../types';
 
 interface ParticipantsGridProps {
@@ -51,7 +51,7 @@ export const ParticipantsGrid = ({ candidates, isDark }: ParticipantsGridProps) 
                         </div>
 
                         <h3 className={`font-bold text-sm mb-1 truncate w-full ${styles.textPrimary}`}>
-                            {candidate.name}
+                            {getDisplayName(candidate.name)}
                         </h3>
 
                         <div className={`text-xs mb-3 ${styles.textSecondary}`}>
