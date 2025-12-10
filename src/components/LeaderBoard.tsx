@@ -1,7 +1,7 @@
 import React from 'react';
 import { Users, TrendingUp, Instagram, Twitter, Facebook, Youtube, Twitch } from 'lucide-react';
 import type { Candidate } from '../types';
-import { getAvatar } from '../utils/helpers';
+import { getAvatar, getDisplayName } from '../utils/helpers';
 import { SOCIAL_MAP, KICK_ICON } from '../utils/constants';
 
 interface LeaderBoardProps {
@@ -60,7 +60,7 @@ export const LeaderBoard: React.FC<LeaderBoardProps> = ({ candidates, dangerList
     return (
         <div className={`border rounded-xl overflow-hidden shadow-lg ${isDark ? 'bg-[#111] border-white/10' : 'bg-white border-gray-200'}`}>
             {/* Table Header */}
-            <div className={`grid grid-cols-12 gap-2 md:gap-4 p-4 text-[10px] uppercase tracking-widest font-bold border-b ${isDark ? 'text-gray-500 border-white/5' : 'text-gray-400 border-gray-100'}`}>
+            <div className={`grid grid-cols-12 gap-2 md:gap-4 p-3 md:p-4 text-[9px] md:text-[10px] uppercase tracking-widest font-bold border-b ${isDark ? 'text-gray-500 border-white/5' : 'text-gray-400 border-gray-100'}`}>
                 <div className="col-span-2 md:col-span-1 text-center">Rank</div>
                 <div className="col-span-6 md:col-span-4">Participante</div>
                 <div className="col-span-3 hidden md:block">Tendencia</div>
@@ -80,7 +80,7 @@ export const LeaderBoard: React.FC<LeaderBoardProps> = ({ candidates, dangerList
                     const style = getRankStyle(rank, isDanger);
 
                     return (
-                        <div key={row.name} className={`grid grid-cols-12 gap-2 md:gap-4 p-4 items-center transition-colors group ${isDark ? 'hover:bg-white/[0.02]' : 'hover:bg-gray-50'}`}>
+                        <div key={row.name} className={`grid grid-cols-12 gap-2 md:gap-4 p-3 md:p-4 items-center transition-colors group ${isDark ? 'hover:bg-white/[0.02]' : 'hover:bg-gray-50'}`}>
 
                             <div className="col-span-2 md:col-span-1 flex justify-center">
                                 <div className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold font-serif ${style.bg} ${style.text} border ${style.border}`}>
@@ -95,7 +95,7 @@ export const LeaderBoard: React.FC<LeaderBoardProps> = ({ candidates, dangerList
                                     alt={row.name}
                                 />
                                 <div className="min-w-0">
-                                    <div className={`font-bold text-xs md:text-sm truncate ${isDark ? 'text-white' : 'text-gray-900'}`}>{row.name}</div>
+                                    <div className={`font-bold text-xs md:text-sm truncate ${isDark ? 'text-white' : 'text-gray-900'}`}>{getDisplayName(row.name)}</div>
                                     {(rank <= 3 || isDanger) && (
                                         <span className={`text-[10px] flex items-center gap-1 ${style.text}`}>
                                             {rank <= 3 && !isDanger && <Users size={10} />}

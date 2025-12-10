@@ -1,6 +1,14 @@
 import { GENDER_MAP, AVATAR_MAP } from './constants';
 import type { Candidate, Gender } from '../types';
 
+// Display name mapping - maps API names to user-facing display names
+const DISPLAY_NAME_MAP: Record<string, string> = {
+    'Soley': 'Sopley',
+    'Juanda': 'Frozono',
+};
+
+export const getDisplayName = (name: string): string => DISPLAY_NAME_MAP[name] || name;
+
 export const getGender = (name: string): Gender => GENDER_MAP[name] || 'U';
 export const getAvatar = (name: string): string =>
     AVATAR_MAP[name] || 'https://via.placeholder.com/80?text=?';

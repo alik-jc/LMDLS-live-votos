@@ -1,7 +1,7 @@
 import React from 'react';
 import { Crown, AlertTriangle } from 'lucide-react';
 import type { Candidate } from '../types';
-import { getAvatar, getGender } from '../utils/helpers';
+import { getAvatar, getGender, getDisplayName } from '../utils/helpers';
 
 interface PossibleChampionsProps {
     candidates: Candidate[];
@@ -44,7 +44,7 @@ export const PossibleChampions: React.FC<PossibleChampionsProps> = ({ candidates
                         </span>
                     </div>
                     <div className="flex-1 min-w-0">
-                        <h4 className={`font-bold truncate ${isDark ? 'text-white' : 'text-gray-900'}`}>{candidate.name}</h4>
+                        <h4 className={`font-bold truncate ${isDark ? 'text-white' : 'text-gray-900'}`}>{getDisplayName(candidate.name)}</h4>
                         <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                             {candidate.votes.toLocaleString()} votos • {candidate.percentage}%
                         </p>
@@ -113,7 +113,7 @@ export const PossibleChampions: React.FC<PossibleChampionsProps> = ({ candidates
                                     className="w-8 h-8 rounded-full border border-[#8c3034] object-cover"
                                 />
                                 <div>
-                                    <span className={`font-medium text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>{p.name}</span>
+                                    <span className={`font-medium text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>{getDisplayName(p.name)}</span>
                                     <p className="text-[#8c3034] text-xs">{p.votes.toLocaleString()} ({p.percentage}%)</p>
                                 </div>
                             </div>
