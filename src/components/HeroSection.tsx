@@ -131,7 +131,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                                     </>
                                 ) : isFinal ? (
                                     <>
-                                        <span className="text-white">El Rey y la Reina</span>
+                                        <span className="text-white">El Campeón y la Campeona</span>
                                         <br />
                                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ffd700] via-[#ffcc00] to-[#ffaa00]">
                                             de La Mansión

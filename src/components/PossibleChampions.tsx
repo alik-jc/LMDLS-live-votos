@@ -66,11 +66,11 @@ export const PossibleChampions: React.FC<PossibleChampionsProps> = ({ candidates
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Rey - Male Champions */}
+                    {/* Campeón - Male Champions */}
                     <div className={`p-6 rounded-xl border ${isDark ? 'bg-[#0a0a0a] border-blue-500/20' : 'bg-blue-50/50 border-blue-200'}`}>
                         <div className="flex items-center gap-2 mb-4">
                             <span className="text-blue-400">👑</span>
-                            <h3 className={`font-bold ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>Candidatos a Rey</h3>
+                            <h3 className={`font-bold ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>Candidatos a Campeón</h3>
                         </div>
                         <div className="space-y-3">
                             {males.map((c, i) => (
@@ -79,11 +79,11 @@ export const PossibleChampions: React.FC<PossibleChampionsProps> = ({ candidates
                         </div>
                     </div>
 
-                    {/* Reina - Female Champions */}
+                    {/* Campeona - Female Champions */}
                     <div className={`p-6 rounded-xl border ${isDark ? 'bg-[#0a0a0a] border-pink-500/20' : 'bg-pink-50/50 border-pink-200'}`}>
                         <div className="flex items-center gap-2 mb-4">
                             <span className="text-pink-400">👑</span>
-                            <h3 className={`font-bold ${isDark ? 'text-pink-400' : 'text-pink-600'}`}>Candidatas a Reina</h3>
+                            <h3 className={`font-bold ${isDark ? 'text-pink-400' : 'text-pink-600'}`}>Candidatas a Campeona</h3>
                         </div>
                         <div className="space-y-3">
                             {females.map((c, i) => (
