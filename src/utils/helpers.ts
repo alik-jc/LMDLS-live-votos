@@ -6,6 +6,7 @@ const DISPLAY_NAME_MAP: Record<string, string> = {
     'Soley': 'Sopley',
     'Juanda': 'Frozono',
     'El Agropecuario': 'Mi Lidel 🐎',
+    'Edits De Mierda': 'WestCol-Negro',
 };
 
 export const getDisplayName = (name: string): string => DISPLAY_NAME_MAP[name] || name;
