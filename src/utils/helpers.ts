@@ -5,6 +5,7 @@ import type { Candidate, Gender } from '../types';
 const DISPLAY_NAME_MAP: Record<string, string> = {
     'Soley': 'Sopley',
     'Juanda': 'Frozono',
+    'El Agropecuario': 'Mi Lidel 🐎',
 };
 
 export const getDisplayName = (name: string): string => DISPLAY_NAME_MAP[name] || name;
