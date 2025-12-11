@@ -39,7 +39,7 @@ export const AboutSection = ({ isDark }: AboutSectionProps) => {
                 </div>
 
                 <p>
-                    El objetivo es simple: sobrevivir a la convivencia, ganar los retos y conquistar al público para convertirse en el <span className={styles.accent}>Rey o Reina de La Mansión</span>.
+                    El objetivo es simple: sobrevivir a la convivencia, ganar los retos y conquistar al público para convertirse en el <span className={styles.accent}>Campeón o Campeona de La Mansión</span>.
                 </p>
             </div>
         </div>
