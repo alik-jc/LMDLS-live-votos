@@ -1,6 +1,6 @@
 # 🏰 La Mansión - Votación en Vivo
 
-Visualizador en tiempo real y plataforma de resultados para **La Mansión de los Streamers** de Westcol.
+Visualizador en tiempo real y plataforma de resultados para **La Mansión de los Streamers I** de Westcol.
 
 > **🎉 ESTADO ACTUAL: EVENTO FINALIZADO**
 > Los ganadores han sido anunciados y la votación ha concluido.
