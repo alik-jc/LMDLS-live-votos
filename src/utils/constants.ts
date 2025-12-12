@@ -8,6 +8,7 @@ export const GENDER_MAP: Record<string, 'M' | 'F'> = {
     'La Piquiña': 'M',
     'Karen Orozco': 'F',
     'Soley': 'F',
+    'Sopley': 'F',
     'Emikukis': 'F',
     'Ismael Sanchez': 'M',
     'El Agropecuario': 'M',
@@ -16,6 +17,7 @@ export const GENDER_MAP: Record<string, 'M' | 'F'> = {
     'Edits De Mierda': 'M',
     'El Domi': 'M',
     'Male': 'F',
+    'Malee': 'F',
     'Soy Frezo': 'M',
     'SoyFrezo': 'M',
     'SoyFreso': 'M',
@@ -41,12 +43,16 @@ export const AVATAR_MAP: Record<string, string> = {
     'Natalia Es Mejor': '/avatars/1W1NH2dm.png',
     'ElCone': '/avatars/uJlFcL3m.png',
     'Andyysuz': '/avatars/fbiaXogm.png',
+    'Andyyuz': '/avatars/fbiaXogm.png',
     'Emikukis': '/avatars/eVRMQl0m.png',
     'May Osorio': '/avatars/vyNXVNVm.png',
     'Karen Orozco': '/avatars/b8SNllXm.png',
     'Alejandra Buitrago': '/avatars/3WF7giam.png',
     'Cami Pulgarin': '/avatars/4JOgnRjm.png',
+    'Malee': '/avatars/RuwqN0fm.png',
     'Vita Celestine': '/avatars/vita_celestine.png',
+    'Soley': '/avatars/8v0CfNBm.png',
+    'Sopley': '/avatars/8v0CfNBm.png',
 };
 
 export const KICK_ICON = 'https://cdn.bfldr.com/M71JT1XM/at/6c67ckf9pnxjstxf286xk7kp/Wordmark_Black.png?auto=webp&format=png';
@@ -89,6 +95,10 @@ export const SOCIAL_MAP: Record<string, SocialMedia[]> = {
         { platform: 'instagram', url: 'https://www.instagram.com/karen_orozco_05' }
     ],
     'Soley': [
+        { platform: 'instagram', url: 'https://www.instagram.com/soley' },
+        { platform: 'tiktok', url: 'https://www.tiktok.com/@soleyoficial' }
+    ],
+    'Sopley': [
         { platform: 'instagram', url: 'https://www.instagram.com/soley' },
         { platform: 'tiktok', url: 'https://www.tiktok.com/@soleyoficial' }
     ],

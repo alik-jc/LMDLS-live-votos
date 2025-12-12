@@ -63,6 +63,74 @@ export const EventFinishedLanding = ({ isDark }: EventFinishedLandingProps) => {
                 </div>
             </section>
 
+            {/* Winners Showcase */}
+            <section className="max-w-4xl mx-auto">
+                <div className={`relative p-8 rounded-2xl border overflow-hidden ${isDark ? 'bg-gradient-to-br from-[#1a1a1a] to-black border-[#ffd700]/20' : 'bg-white border-yellow-200'}`}>
+                    {/* Background Glow */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#ffd700]/10 via-transparent to-transparent pointer-events-none" />
+
+                    <div className="relative text-center mb-8">
+                        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#ffd700]/10 border border-[#ffd700]/20 text-[#ffd700] text-xs font-bold uppercase tracking-wider mb-4">
+                            <Trophy size={14} />
+                            Ganadores Oficiales
+                        </div>
+                        <h2 className={`text-3xl md:text-4xl font-serif ${styles.textPrimary}`}>
+                            Los Campeones
+                        </h2>
+                        <p className={`mt-2 text-sm ${styles.textSecondary}`}>
+                            Elegidos por la comunidad y el consejo de profesores
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8 items-center justify-center max-w-2xl mx-auto">
+                        {/* Winner 1 */}
+                        <div className="flex flex-col items-center group">
+                            <div className="relative w-32 h-32 mb-4">
+                                <div className="absolute inset-0 rounded-full bg-[#ffd700] blur-lg opacity-20 group-hover:opacity-40 transition-opacity" />
+                                <img
+                                    src="/avatars/1W1NH2dm.png"
+                                    alt="Natalia Es Mejor"
+                                    className="relative w-full h-full rounded-full object-cover border-4 border-[#ffd700] shadow-xl"
+                                />
+                                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#ffd700] to-[#ffaa00] text-black text-[10px] font-black px-3 py-0.5 rounded-full shadow-lg whitespace-nowrap">
+                                    CAMPEONA
+                                </div>
+                            </div>
+                            <h3 className={`text-xl font-bold ${styles.textPrimary}`}>Natalia Es Mejor</h3>
+                            <div className="flex gap-3 mt-3">
+                                <a href="https://www.instagram.com/nataliaeslamejorl" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#E1306C] transition-colors">
+                                    <Instagram size={18} />
+                                </a>
+                            </div>
+                        </div>
+
+                        {/* Winner 2 */}
+                        <div className="flex flex-col items-center group">
+                            <div className="relative w-32 h-32 mb-4">
+                                <div className="absolute inset-0 rounded-full bg-[#ffd700] blur-lg opacity-20 group-hover:opacity-40 transition-opacity" />
+                                <img
+                                    src="/avatars/Us5nUSJm.png"
+                                    alt="Edits De Mierda"
+                                    className="relative w-full h-full rounded-full object-cover border-4 border-[#ffd700] shadow-xl"
+                                />
+                                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#ffd700] to-[#ffaa00] text-black text-[10px] font-black px-3 py-0.5 rounded-full shadow-lg whitespace-nowrap">
+                                    CAMPEÓN
+                                </div>
+                            </div>
+                            <h3 className={`text-xl font-bold ${styles.textPrimary}`}>Edits De Mierda</h3>
+                            <div className="flex gap-3 mt-3">
+                                <a href="https://www.instagram.com/soyedits_oficial" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#E1306C] transition-colors">
+                                    <Instagram size={18} />
+                                </a>
+                                <a href="https://kick.com/editsdemrd" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#53fc18] transition-colors">
+                                    <img src={KICK_ICON} alt="Kick" className="w-4 h-4 opacity-70 hover:opacity-100" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Stream Player (Hidden by default) */}
             {showStream && (
                 <section className="max-w-5xl mx-auto">
