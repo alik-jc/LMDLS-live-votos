@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { Menu, Github, X } from 'lucide-react';
 
 interface HeaderProps {
-    isDark: boolean;
-    toggleTheme: () => void;
     currentView: string;
     onNavigate: (view: string) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme, currentView, onNavigate }) => {
+export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleNavigate = (view: string) => {
@@ -17,7 +15,7 @@ export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme, currentView
     };
 
     return (
-        <nav className={`border-b backdrop-blur-md sticky top-0 z-50 transition-colors duration-300 ${isDark ? 'border-white/10 bg-[#0a0a0a]/80' : 'border-[#8c3034] bg-[#8c3034]/95'}`}>
+        <nav className="border-b backdrop-blur-md sticky top-0 z-50 transition-colors duration-300 border-white/10 bg-[#0a0a0a]/80">
             <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <img src="/lamansion-logo.svg" alt="La Mansión" className="h-12 w-auto" />
@@ -69,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme, currentView
 
             {/* Mobile Menu Overlay */}
             {isMenuOpen && (
-                <div className={`md:hidden absolute top-20 left-0 w-full h-[calc(100vh-5rem)] ${isDark ? 'bg-[#0a0a0a]/95' : 'bg-[#8c3034]/95'} backdrop-blur-xl border-b border-white/10 animate-in slide-in-from-top-5`}>
+                <div className="md:hidden absolute top-20 left-0 w-full h-[calc(100vh-5rem)] bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/10 animate-in slide-in-from-top-5">
                     <div className="flex flex-col p-6 space-y-6 text-center">
                         <button
                             onClick={() => handleNavigate('dashboard')}
