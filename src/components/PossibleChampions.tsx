@@ -130,8 +130,8 @@ export const PossibleChampions: React.FC<PossibleChampionsProps> = ({ candidates
                 </p>
             </div>
 
-            {/* Podium Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-end max-w-5xl mx-auto">
+            {/* Podium Layout - Desktop Only */}
+            <div className="hidden lg:grid lg:grid-cols-3 gap-6 lg:gap-8 items-end max-w-5xl mx-auto">
                 {podiumOrder.map((candidate, index) => {
                     // Map podium position to actual rank
                     const actualRank = index === 0 ? 2 : index === 1 ? 1 : 3;

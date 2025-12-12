@@ -24,33 +24,34 @@ export const GENDER_MAP: Record<string, 'M' | 'F'> = {
     'Soy Freso': 'M',
 };
 
-// URLs optimizadas con CDN i0.wp
-const CDN_PREFIX = 'https://i0.wp.com/i.imgur.com/';
+// URLs directas de Imgur con thumbnails (evita rate limiting)
+// Sufijos: s=small (90x90), b=big (160x160), t=thumbnail (160x160), m=medium (320x320), l=large (640x640)
+const CDN_PREFIX = 'https://i.imgur.com/';
 
 export const AVATAR_MAP: Record<string, string> = {
-    'Ismael Sanchez': `${CDN_PREFIX}UaGpHqAt.png`,
-    'Pesque': `${CDN_PREFIX}RdSDKsRt.png`,
-    'Edits De Mierda': `${CDN_PREFIX}Us5nUSJt.png`,
-    'Juanda': `${CDN_PREFIX}h6rIkXEt.png`,
-    'La Piquiña': `${CDN_PREFIX}RrVhcUZt.png`,
-    'KingLuiz': `${CDN_PREFIX}qQOy7Cmt.png`,
-    'Soy Frezo': `${CDN_PREFIX}JvQNhAUt.png`,
-    'El Agropecuario': `${CDN_PREFIX}NncLW7Et.png`,
-    'El Domi': `${CDN_PREFIX}yon3rMZt.png`,
-    'Ness': `${CDN_PREFIX}3UZmzBlt.png`,
-    'Natalia Es Mejor': `${CDN_PREFIX}1W1NH2dt.png`,
-    'El Cone': `${CDN_PREFIX}uJlFcL3t.png`,
-    'Andyysuz': `${CDN_PREFIX}fbiaXogt.png`,
-    'Emikukis': `${CDN_PREFIX}eVRMQl0t.png`,
-    'May Osorio': `${CDN_PREFIX}vyNXVNVt.png`,
-    'Karen Orozco': `${CDN_PREFIX}b8SNllXt.png`,
-    'Alejandra Buitrago': `${CDN_PREFIX}3WF7giat.png`,
-    'Cami Pulgarin': `${CDN_PREFIX}4JOgnRjt.png`,
-    'Male': `${CDN_PREFIX}RuwqN0ft.png`,
-    'Soley': `${CDN_PREFIX}8v0CfNBt.png`,
+    'Ismael Sanchez': `${CDN_PREFIX}UaGpHqAm.png`,
+    'Pesque': `${CDN_PREFIX}RdSDKsRm.png`,
+    'Edits De Mierda': `${CDN_PREFIX}Us5nUSJm.png`,
+    'Juanda': `${CDN_PREFIX}h6rIkXEm.png`,
+    'La Piquiña': `${CDN_PREFIX}RrVhcUZm.png`,
+    'KingLuiz': `${CDN_PREFIX}qQOy7Cmm.png`,
+    'Soy Frezo': `${CDN_PREFIX}JvQNhAUm.png`,
+    'El Agropecuario': `${CDN_PREFIX}NncLW7Em.png`,
+    'El Domi': `${CDN_PREFIX}yon3rMZm.png`,
+    'Ness': `${CDN_PREFIX}3UZmzBlm.png`,
+    'Natalia Es Mejor': `${CDN_PREFIX}1W1NH2dm.png`,
+    'El Cone': `${CDN_PREFIX}uJlFcL3m.png`,
+    'Andyysuz': `${CDN_PREFIX}fbiaXogm.png`,
+    'Emikukis': `${CDN_PREFIX}eVRMQl0m.png`,
+    'May Osorio': `${CDN_PREFIX}vyNXVNVm.png`,
+    'Karen Orozco': `${CDN_PREFIX}b8SNllXm.png`,
+    'Alejandra Buitrago': `${CDN_PREFIX}3WF7giam.png`,
+    'Cami Pulgarin': `${CDN_PREFIX}4JOgnRjm.png`,
+    'Male': `${CDN_PREFIX}RuwqN0fm.png`,
+    'Soley': `${CDN_PREFIX}8v0CfNBm.png`,
 };
 
-export const KICK_ICON = 'https://i0.wp.com/i.imgur.com/KtdMrMY.png';
+export const KICK_ICON = 'https://i.imgur.com/KtdMrMYm.png';
 
 export type SocialPlatform = 'instagram' | 'tiktok' | 'twitter' | 'facebook' | 'twitch' | 'kick' | 'youtube';
 
