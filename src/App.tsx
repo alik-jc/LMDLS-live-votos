@@ -18,13 +18,8 @@ import { Users } from 'lucide-react';
 
 function App() {
   // State
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') === 'dark' ||
-        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    }
-    return true;
-  });
+  // Theme is always dark now
+  const isDark = true;
 
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [lastFetchTime, setLastFetchTime] = useState<string>('');
@@ -48,12 +43,7 @@ function App() {
   const isNoVotingState = isEventFinished || isVotingPaused;
   const isActiveButNoData = !loading && candidates.length === 0;
 
-  // Theme toggle
-  const toggleTheme = () => {
-    const newTheme = !isDark;
-    setIsDark(newTheme);
-    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
-  };
+
 
   // Fetch Data
   useEffect(() => {
@@ -123,8 +113,7 @@ function App() {
       {isEventFinished ? (
         <>
           <Header
-            isDark={isDark}
-            toggleTheme={toggleTheme}
+
             currentView={currentView}
             onNavigate={setCurrentView}
           />
@@ -150,8 +139,7 @@ function App() {
           )}
 
           <Header
-            isDark={isDark}
-            toggleTheme={toggleTheme}
+
             currentView={(isNoVotingState && currentView !== 'about') ? 'participants' : currentView}
             onNavigate={setCurrentView}
           />
