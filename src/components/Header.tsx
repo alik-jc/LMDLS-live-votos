@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sun, Moon, Menu, Github, X } from 'lucide-react';
+import { Menu, Github, X } from 'lucide-react';
 
 interface HeaderProps {
     isDark: boolean;
