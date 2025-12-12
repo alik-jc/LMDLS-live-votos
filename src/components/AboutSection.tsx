@@ -34,7 +34,7 @@ export const AboutSection = ({ isDark }: AboutSectionProps) => {
                     </div>
                     <div className={`p-5 rounded-lg border ${isDark ? 'bg-black/20 border-white/5' : 'bg-gray-50 border-gray-100'}`}>
                         <h3 className={`font-bold mb-2 ${styles.textPrimary}`}>🗳️ El Poder del Voto</h3>
-                        <p className="text-sm">Tú decides quién se queda y quién se va. Las votaciones en tiempo real definen el destino de los participantes cada dia.</p>
+                        <p className="text-sm">Tú decides quién se queda y quién se va. Las votaciones en tiempo real definen el destino de los participantes y las eliminaciones son diarias.</p>
                     </div>
                 </div>
 

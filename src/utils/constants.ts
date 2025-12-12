@@ -8,6 +8,7 @@ export const GENDER_MAP: Record<string, 'M' | 'F'> = {
     'La Piquiña': 'M',
     'Karen Orozco': 'F',
     'Soley': 'F',
+    'Sopley': 'F',
     'Emikukis': 'F',
     'Ismael Sanchez': 'M',
     'El Agropecuario': 'M',
@@ -16,6 +17,7 @@ export const GENDER_MAP: Record<string, 'M' | 'F'> = {
     'Edits De Mierda': 'M',
     'El Domi': 'M',
     'Male': 'F',
+    'Malee': 'F',
     'Soy Frezo': 'M',
     'SoyFrezo': 'M',
     'SoyFreso': 'M',
@@ -26,32 +28,34 @@ export const GENDER_MAP: Record<string, 'M' | 'F'> = {
 
 // URLs directas de Imgur con thumbnails (evita rate limiting)
 // Sufijos: s=small (90x90), b=big (160x160), t=thumbnail (160x160), m=medium (320x320), l=large (640x640)
-const CDN_PREFIX = 'https://i.imgur.com/';
 
 export const AVATAR_MAP: Record<string, string> = {
-    'Ismael Sanchez': `${CDN_PREFIX}UaGpHqAm.png`,
-    'Pesque': `${CDN_PREFIX}RdSDKsRm.png`,
-    'Edits De Mierda': `${CDN_PREFIX}Us5nUSJm.png`,
-    'Juanda': `${CDN_PREFIX}h6rIkXEm.png`,
-    'La Piquiña': `${CDN_PREFIX}RrVhcUZm.png`,
-    'KingLuiz': `${CDN_PREFIX}qQOy7Cmm.png`,
-    'Soy Frezo': `${CDN_PREFIX}JvQNhAUm.png`,
-    'El Agropecuario': `${CDN_PREFIX}NncLW7Em.png`,
-    'El Domi': `${CDN_PREFIX}yon3rMZm.png`,
-    'Ness': `${CDN_PREFIX}3UZmzBlm.png`,
-    'Natalia Es Mejor': `${CDN_PREFIX}1W1NH2dm.png`,
-    'El Cone': `${CDN_PREFIX}uJlFcL3m.png`,
-    'Andyysuz': `${CDN_PREFIX}fbiaXogm.png`,
-    'Emikukis': `${CDN_PREFIX}eVRMQl0m.png`,
-    'May Osorio': `${CDN_PREFIX}vyNXVNVm.png`,
-    'Karen Orozco': `${CDN_PREFIX}b8SNllXm.png`,
-    'Alejandra Buitrago': `${CDN_PREFIX}3WF7giam.png`,
-    'Cami Pulgarin': `${CDN_PREFIX}4JOgnRjm.png`,
-    'Male': `${CDN_PREFIX}RuwqN0fm.png`,
-    'Soley': `${CDN_PREFIX}8v0CfNBm.png`,
+    'Ismael Sanchez': '/avatars/UaGpHqAm.png',
+    'Pesque': '/avatars/RdSDKsRm.png',
+    'Edits De Mierda': '/avatars/Us5nUSJm.png',
+    'Juanda': '/avatars/h6rIkXEm.png',
+    'La Piquiña': '/avatars/RrVhcUZm.png',
+    'KingLuiz': '/avatars/qQOy7Cmm.png',
+    'SoyFrezo': '/avatars/JvQNhAUm.png',
+    'El Agropecuario': '/avatars/NncLW7Em.png',
+    'ElDomi': '/avatars/yon3rMZm.png',
+    'Ness': '/avatars/3UZmzBlm.png',
+    'Natalia Es Mejor': '/avatars/1W1NH2dm.png',
+    'ElCone': '/avatars/uJlFcL3m.png',
+    'Andyysuz': '/avatars/fbiaXogm.png',
+    'Andyyuz': '/avatars/fbiaXogm.png',
+    'Emikukis': '/avatars/eVRMQl0m.png',
+    'May Osorio': '/avatars/vyNXVNVm.png',
+    'Karen Orozco': '/avatars/b8SNllXm.png',
+    'Alejandra Buitrago': '/avatars/3WF7giam.png',
+    'Cami Pulgarin': '/avatars/4JOgnRjm.png',
+    'Malee': '/avatars/RuwqN0fm.png',
+    'Vita Celestine': '/avatars/vita_celestine.png',
+    'Soley': '/avatars/8v0CfNBm.png',
+    'Sopley': '/avatars/8v0CfNBm.png',
 };
 
-export const KICK_ICON = 'https://i.imgur.com/KtdMrMYm.png';
+export const KICK_ICON = 'https://cdn.bfldr.com/M71JT1XM/at/6c67ckf9pnxjstxf286xk7kp/Wordmark_Black.png?auto=webp&format=png';
 
 export type SocialPlatform = 'instagram' | 'tiktok' | 'twitter' | 'facebook' | 'twitch' | 'kick' | 'youtube';
 
@@ -91,6 +95,10 @@ export const SOCIAL_MAP: Record<string, SocialMedia[]> = {
         { platform: 'instagram', url: 'https://www.instagram.com/karen_orozco_05' }
     ],
     'Soley': [
+        { platform: 'instagram', url: 'https://www.instagram.com/soley' },
+        { platform: 'tiktok', url: 'https://www.tiktok.com/@soleyoficial' }
+    ],
+    'Sopley': [
         { platform: 'instagram', url: 'https://www.instagram.com/soley' },
         { platform: 'tiktok', url: 'https://www.tiktok.com/@soleyoficial' }
     ],

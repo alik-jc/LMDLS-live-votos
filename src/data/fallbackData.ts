@@ -2,7 +2,7 @@ import type { Candidate } from '../types';
 
 /**
  * Datos estáticos de La Mansión de los Streamers
- * Universidad de Streaming - 7 días de contenido
+ * Universidad de Streaming - Actividades diarias y eliminaciones
  */
 
 // Lista completa de los 22 participantes originales
@@ -57,10 +57,10 @@ export const EVENT_INFO = {
         channel: "westcol",
         url: "https://kick.com/westcol"
     },
-    description: "La primera Universidad de Streaming en Latinoamérica. 22 creadores de contenido convivieron durante 7 días en La Mansión, aprendiendo, compitiendo y enfrentando eliminaciones decididas por el público.",
+    description: "La primera Universidad de Streaming en Latinoamérica. 22 creadores de contenido convivieron en La Mansión, aprendiendo, compitiendo y enfrentando eliminaciones diarias decididas por el público.",
     streamInfo: "Streams diarios de hasta 10 horas",
-    duration: "7 días",
-    totalDays: 7,
+    duration: `${import.meta.env.VITE_TOTAL_DAYS || 7} días`,
+    totalDays: parseInt(import.meta.env.VITE_TOTAL_DAYS || '7', 10),
     totalParticipants: 22,
     finalists: 10
 };

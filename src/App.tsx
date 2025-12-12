@@ -8,232 +8,111 @@ import { VersionChecker } from './components/VersionChecker';
 import { AboutSection } from './components/AboutSection';
 import { ParticipantsGrid } from './components/ParticipantsGrid';
 import { HeroSection } from './components/HeroSection';
+import { CommunityPage } from './components/CommunityPage';
 import { EventFinishedLanding } from './components/EventFinishedLanding';
-import { getGender } from './utils/helpers';
+import { FALLBACK_CANDIDATES } from './data/fallbackData';
 import { enrichCandidateData } from './utils/enrichment';
-import type { Candidate, FilterType, VotesData } from './types';
+import { formatTime } from './utils/helpers';
+import type { Candidate, FilterType } from './types';
 import { Users } from 'lucide-react';
 
-const FILTER_CACHE_KEY = 'mansion_filter_preference';
-const THEME_CACHE_KEY = 'mansion_theme_preference';
-
 function App() {
+  // State
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') === 'dark' ||
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+    return true;
+  });
+
   const [candidates, setCandidates] = useState<Candidate[]>([]);
-  const [filteredCandidates, setFilteredCandidates] = useState<Candidate[]>([]);
-  const [dangerList, setDangerList] = useState<string[]>([]);
+  const [lastFetchTime, setLastFetchTime] = useState<string>('');
+  const [totalVotes, setTotalVotes] = useState<number>(0);
+  const [countdown, setCountdown] = useState<string>('');
   const [isTheaterMode, setIsTheaterMode] = useState(false);
-  const [showChat, setShowChat] = useState(false);
-
-  // Theme State
-  const [theme, setTheme] = useState('dark');
-  const isDark = theme === 'dark';
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem(THEME_CACHE_KEY);
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = isDark ? 'light' : 'dark';
-    setTheme(newTheme);
-    localStorage.setItem(THEME_CACHE_KEY, newTheme);
-  };
-
-  // View State
+  const [showChat, setShowChat] = useState(true);
   const [currentView, setCurrentView] = useState('dashboard');
-
   const [currentFilter, setCurrentFilter] = useState<FilterType>('all');
-
-  useEffect(() => {
-    const savedFilter = localStorage.getItem(FILTER_CACHE_KEY);
-    if (savedFilter) {
-      setCurrentFilter(savedFilter as FilterType);
-    }
-  }, []);
-
-  const [totalVotes, setTotalVotes] = useState(0);
-  const [lastFetchTime, setLastFetchTime] = useState('--:--');
-  const [countdown, setCountdown] = useState('--:--');
   const [loading, setLoading] = useState(true);
 
-
-  const isVotingPaused = import.meta.env.VITE_VOTING_PAUSED === 'true';
+  // Environment variables
   const isEventFinished = import.meta.env.VITE_EVENT_FINISHED === 'true';
   const isFinal = import.meta.env.VITE_IS_FINAL === 'true';
-  const currentDay = parseInt(import.meta.env.VITE_CURRENT_DAY || '7', 10);
-  const totalDays = parseInt(import.meta.env.VITE_TOTAL_DAYS || '7', 10);
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const currentDay = parseInt(import.meta.env.VITE_CURRENT_DAY || '1');
+  const totalDays = parseInt(import.meta.env.VITE_TOTAL_DAYS || '7');
+  const voteUrl = import.meta.env.VITE_VOTE_URL;
 
-  const CACHE_KEY = 'mansion_votes_data';
-  const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+  // Derived state
+  const isVotingPaused = false;
+  const isNoVotingState = isEventFinished || isVotingPaused;
+  const isActiveButNoData = !loading && candidates.length === 0;
 
-  const processData = (data: VotesData, timestamp?: number) => {
-    // Check if we have visual data (votes)
-    const hasVisualData = data.payload.settings?.results?.visual_data?.length > 0;
-    const rawData = hasVisualData ? data.payload.settings.results.visual_data[0] : {};
-
-    // Map array of objects to array of strings (names)
-    const validCandidates = data.payload.candidates?.map(c => c.name) || [];
-    const candidatesList: Candidate[] = [];
-
-    if (hasVisualData) {
-      // Normal mode: We have votes
-      for (const [key, value] of Object.entries(rawData)) {
-        if (key !== 'round') {
-          // Filter by valid candidates list if available
-          if (validCandidates.length > 0 && !validCandidates.includes(key)) {
-            continue;
-          }
-          candidatesList.push({ name: key, votes: value });
-        }
-      }
-    } else if (validCandidates.length > 0) {
-      // Fallback mode: We only have candidates, no votes yet
-      validCandidates.forEach(name => {
-        candidatesList.push({ name, votes: 0 });
-      });
-    }
-
-    candidatesList.sort((a, b) => b.votes - a.votes);
-
-    const total = candidatesList.reduce((sum, c) => sum + c.votes, 0);
-
-    // Calculate Standard Deviation (only if we have votes)
-    let threshold = 0;
-    if (total > 0) {
-      const mean = total / candidatesList.length;
-      const variance = candidatesList.reduce((sum, c) => sum + Math.pow(c.votes - mean, 2), 0) / candidatesList.length;
-      const stdDev = Math.sqrt(variance);
-      threshold = mean + stdDev;
-    }
-
-    const enrichedCandidates = candidatesList.map((c) => {
-      let botPercentage = '0';
-
-      if (total > 0 && c.votes > threshold) {
-        const suspiciousVotes = c.votes - threshold;
-        botPercentage = ((suspiciousVotes / c.votes) * 100).toFixed(1);
-      }
-
-      const baseCandidate = {
-        ...c,
-        percentage: total > 0 ? ((c.votes / total) * 100).toFixed(1) : '0',
-        botPercentage: botPercentage === '0.0' ? '0' : botPercentage
-      };
-
-      // Enrich with social media and live status
-      return enrichCandidateData(baseCandidate);
-    });
-
-    const males = enrichedCandidates.filter(c => getGender(c.name) === 'M');
-    const females = enrichedCandidates.filter(c => getGender(c.name) === 'F');
-
-    // Get bottom 1 of each gender
-    const lowestMales = males.slice(-1);
-    const lowestFemales = females.slice(-1);
-    const danger = [...lowestMales, ...lowestFemales].map((c) => c.name);
-
-    setCandidates(enrichedCandidates);
-    setDangerList(danger);
-    setTotalVotes(total);
-    setLastFetchTime(new Date(timestamp || Date.now()).toLocaleTimeString());
-    setLoading(false);
+  // Theme toggle
+  const toggleTheme = () => {
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
   };
 
-  const fetchData = async () => {
-    // Removed isVotingPaused check to allow continuous updates
-    try {
-      const targetUrl = apiUrl;
-      const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl + '?_=' + Date.now());
-      const response = await fetch(proxyUrl, { cache: 'no-store' });
-
-      if (!response.ok) throw new Error('Network response was not ok');
-
-      const data = await response.json();
-
-      const now = Date.now();
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: now }));
-      processData(data, now);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      if (candidates.length === 0) {
+  // Fetch Data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Use fallback data enriched
+        const enriched = FALLBACK_CANDIDATES.map(enrichCandidateData);
+        setCandidates(enriched);
+        setTotalVotes(enriched.reduce((acc, c) => acc + c.votes, 0));
+        setLastFetchTime(formatTime(new Date()));
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
         setLoading(false);
       }
-    }
-  };
+    };
 
-  useEffect(() => {
-    // Only run on client
-    if (typeof window === 'undefined') return;
-
-    const cached = localStorage.getItem(CACHE_KEY);
-    let shouldFetch = true;
-
-    if (cached) {
-      try {
-        const { data, timestamp } = JSON.parse(cached);
-        processData(data, timestamp);
-
-        const age = Date.now() - timestamp;
-        if (age < CACHE_DURATION) {
-          shouldFetch = false;
-        }
-      } catch (e) {
-        console.error("Cache parse error", e);
-      }
-    }
-
-    if (shouldFetch) {
-      fetchData();
-    }
-
-    let lastFetchMinute = -1;
-    const interval = setInterval(() => {
-      // Removed isVotingPaused check to allow continuous updates
-      const now = new Date();
-      const min = now.getMinutes();
-      const sec = now.getSeconds();
-
-      if (min % 5 === 0 && lastFetchMinute !== min) {
-        lastFetchMinute = min;
-        fetchData();
-      }
-
-      const remMin = 4 - (min % 5);
-      const remSec = 59 - sec;
-      setCountdown(`${remMin}:${remSec.toString().padStart(2, '0')}`);
-    }, 1000);
-
+    fetchData();
+    const interval = setInterval(fetchData, 60000); // 1 min update
     return () => clearInterval(interval);
-  }, [isVotingPaused]);
+  }, []);
 
+  // Countdown logic
   useEffect(() => {
-    localStorage.setItem(FILTER_CACHE_KEY, currentFilter);
+    const updateCountdown = () => {
+      // Placeholder logic for countdown
+      const now = new Date();
+      const endOfDay = new Date();
+      endOfDay.setHours(23, 59, 59, 999);
+      const diff = endOfDay.getTime() - now.getTime();
 
-    if (currentFilter === 'all') {
-      setFilteredCandidates(candidates);
-    } else {
-      setFilteredCandidates(
-        candidates.filter((c) => getGender(c.name) === currentFilter)
-      );
-    }
-  }, [currentFilter, candidates]);
+      if (diff > 0) {
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        setCountdown(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+      } else {
+        setCountdown("00:00:00");
+      }
+    };
 
-  if (loading) {
-    return (
-      <div className={`min-h-screen flex items-center justify-center ${isDark ? 'bg-[#050505]' : 'bg-gray-50'}`}>
-        <div
-          suppressHydrationWarning
-          className="w-10 h-10 border-4 border-gray-300 border-t-[#8c3034] rounded-full animate-spin"
-        />
-      </div>
-    );
-  }
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
-  const isNoVotingState = isVotingPaused && totalVotes === 0;
-  const isActiveButNoData = !isVotingPaused && totalVotes === 0;
+  // Filter logic
+  const filteredCandidates = candidates.filter(c => {
+    if (currentFilter === 'M') return c.gender === 'M';
+    if (currentFilter === 'F') return c.gender === 'F';
+    return true;
+  });
+
+  // Danger list logic (bottom 3 active participants)
+  const dangerList = candidates
+    .filter(c => !c.eliminated)
+    .sort((a, b) => a.votes - b.votes)
+    .slice(0, 3)
+    .map(c => c.name);
 
   return (
     <div className={`min-h-screen font-sans transition-colors duration-500 ${isDark ? 'bg-[#050505] text-gray-100' : 'bg-[#f8f9fa] text-gray-900'}`}>
@@ -254,6 +133,8 @@ function App() {
               <div className="mt-16">
                 <AboutSection isDark={isDark} />
               </div>
+            ) : currentView === 'community' ? (
+              <CommunityPage isDark={isDark} />
             ) : (
               <EventFinishedLanding isDark={isDark} />
             )}
@@ -288,7 +169,7 @@ function App() {
               toggleChat={() => setShowChat(!showChat)}
               isDark={isDark}
               isNoVotingState={isNoVotingState}
-              voteUrl={import.meta.env.VITE_VOTE_URL}
+              voteUrl={voteUrl}
               currentDay={currentDay}
               totalDays={totalDays}
               isFinal={isFinal}
