@@ -1,5 +1,5 @@
-import React from 'react';
-import { Sun, Moon, Menu, Github } from 'lucide-react';
+import React, { useState } from 'react';
+import { Sun, Moon, Menu, Github, X } from 'lucide-react';
 
 interface HeaderProps {
     isDark: boolean;
@@ -9,6 +9,13 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme, currentView, onNavigate }) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const handleNavigate = (view: string) => {
+        onNavigate(view);
+        setIsMenuOpen(false);
+    };
+
     return (
         <nav className={`border-b backdrop-blur-md sticky top-0 z-50 transition-colors duration-300 ${isDark ? 'border-white/10 bg-[#0a0a0a]/80' : 'border-[#8c3034] bg-[#8c3034]/95'}`}>
             <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
@@ -52,16 +59,39 @@ export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme, currentView
                         <Github size={20} />
                     </a>
                     <button
-                        onClick={toggleTheme}
-                        className={`p-2 rounded-full transition-colors hover:bg-white/10`}
+                        className={`md:hidden p-2 text-white transition-colors hover:bg-white/10 rounded-full`}
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
                     >
-                        {isDark ? <Sun size={20} className="text-[#f8dcb2]" /> : <Moon size={20} className="text-gray-300" />}
-                    </button>
-                    <button className={`md:hidden p-2 text-white`}>
-                        <Menu size={24} />
+                        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
                 </div>
             </div>
+
+            {/* Mobile Menu Overlay */}
+            {isMenuOpen && (
+                <div className={`md:hidden absolute top-20 left-0 w-full h-[calc(100vh-5rem)] ${isDark ? 'bg-[#0a0a0a]/95' : 'bg-[#8c3034]/95'} backdrop-blur-xl border-b border-white/10 animate-in slide-in-from-top-5`}>
+                    <div className="flex flex-col p-6 space-y-6 text-center">
+                        <button
+                            onClick={() => handleNavigate('dashboard')}
+                            className={`text-xl font-medium py-3 border-b border-white/10 ${currentView === 'dashboard' ? 'text-white' : 'text-gray-300'}`}
+                        >
+                            Inicio
+                        </button>
+                        <button
+                            onClick={() => handleNavigate('community')}
+                            className={`text-xl font-medium py-3 border-b border-white/10 ${currentView === 'community' ? 'text-white' : 'text-gray-300'}`}
+                        >
+                            Votaciones
+                        </button>
+                        <button
+                            onClick={() => handleNavigate('about')}
+                            className={`text-xl font-medium py-3 border-b border-white/10 ${currentView === 'about' ? 'text-white' : 'text-gray-300'}`}
+                        >
+                            Qué es La Mansión
+                        </button>
+                    </div>
+                </div>
+            )}
         </nav>
     );
 };
