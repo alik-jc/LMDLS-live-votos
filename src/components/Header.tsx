@@ -31,7 +31,7 @@ export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme, currentView
                         onClick={() => onNavigate('community')}
                         className={`transition-colors ${currentView === 'community' ? 'text-white' : 'hover:text-white'}`}
                     >
-                        Integrantes
+                        Votaciones
                     </button>
                     <button
                         onClick={() => onNavigate('about')}
