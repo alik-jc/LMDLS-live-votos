@@ -1,11 +1,8 @@
-import { Tv, Users, Trophy, Play, Calendar } from 'lucide-react';
-import { ParticipantsGrid } from './ParticipantsGrid';
-import { LeaderBoard } from './LeaderBoard';
-import { ALL_PARTICIPANTS, FALLBACK_CANDIDATES, EVENT_INFO } from '../data/fallbackData';
-import { enrichCandidateData } from '../utils/enrichment';
-import type { Candidate } from '../types';
-import { useState } from 'react';
+import { Tv, Trophy, Calendar, Instagram } from 'lucide-react';
+import { EVENT_INFO } from '../data/fallbackData';
 import { KickPlayer } from './KickPlayer';
+import { useState } from 'react';
+import { KICK_ICON } from '../utils/constants';
 
 interface EventFinishedLandingProps {
     isDark: boolean;
@@ -21,10 +18,6 @@ export const EventFinishedLanding = ({ isDark }: EventFinishedLandingProps) => {
         textSecondary: isDark ? 'text-gray-400' : 'text-gray-600',
         accent: isDark ? 'text-[#f8e2bb]' : 'text-[#8c3034]',
     };
-
-    // Enrich participants with social data
-    const enrichedParticipants: Candidate[] = ALL_PARTICIPANTS.map(p => enrichCandidateData(p));
-    const enrichedFinalRanking: Candidate[] = FALLBACK_CANDIDATES.map(p => enrichCandidateData(p));
 
     return (
         <div className="space-y-16 animate-in fade-in slide-in-from-bottom-4">
@@ -48,22 +41,24 @@ export const EventFinishedLanding = ({ isDark }: EventFinishedLandingProps) => {
                     Aquí puedes revivir los momentos y conocer a los participantes.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-                    <button
-                        onClick={() => setShowStream(!showStream)}
-                        className="bg-[#8c3034] hover:bg-[#70262a] text-white font-bold py-4 px-8 rounded shadow-lg transition-all transform hover:scale-105 uppercase tracking-widest text-sm flex items-center gap-2 justify-center"
-                    >
-                        <Play size={18} />
-                        {showStream ? 'Ocultar Stream' : 'Ver Stream'}
-                    </button>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
                     <a
-                        href={EVENT_INFO.platform.url}
+                        href="https://www.instagram.com/lamansiondelosstreamers/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`border font-bold py-4 px-8 rounded shadow-sm transition-all transform hover:scale-105 uppercase tracking-widest text-sm flex items-center gap-2 justify-center ${isDark ? 'border-white/20 hover:bg-white/5 text-white' : 'border-gray-300 hover:bg-gray-50 text-gray-900'}`}
                     >
-                        <Tv size={18} />
-                        Canal de Kick
+                        <Instagram size={18} className="text-[#E1306C]" />
+                        /lamansiondelosstreamers
+                    </a>
+                    <a
+                        href={EVENT_INFO.platform.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-[#53fc18] text-black font-bold py-4 px-8 rounded shadow-lg transition-all transform hover:scale-105 uppercase tracking-widest text-sm flex items-center gap-2 justify-center hover:bg-[#42ca12] animate-pulse"
+                    >
+                        <img src={KICK_ICON} alt="Kick" className="h-4" />
+                        /westcol
                     </a>
                 </div>
             </section>
@@ -102,8 +97,8 @@ export const EventFinishedLanding = ({ isDark }: EventFinishedLandingProps) => {
                         <div className={`text-sm ${styles.textSecondary}`}>Días de evento</div>
                     </div>
                     <div className={`p-4 rounded-lg border text-center ${isDark ? 'bg-black/30 border-white/5' : 'bg-gray-50 border-gray-100'}`}>
-                        <Users className={`mx-auto mb-2 ${styles.accent}`} size={24} />
-                        <div className={`text-2xl font-bold ${styles.textPrimary}`}>{ALL_PARTICIPANTS.length}</div>
+                        <Trophy className={`mx-auto mb-2 ${styles.accent}`} size={24} />
+                        <div className={`text-2xl font-bold ${styles.textPrimary}`}>{EVENT_INFO.totalParticipants}</div>
                         <div className={`text-sm ${styles.textSecondary}`}>Participantes</div>
                     </div>
                     <div className={`p-4 rounded-lg border text-center ${isDark ? 'bg-black/30 border-white/5' : 'bg-gray-50 border-gray-100'}`}>
@@ -114,49 +109,24 @@ export const EventFinishedLanding = ({ isDark }: EventFinishedLandingProps) => {
                 </div>
             </section>
 
-            {/* Final Ranking */}
-            <section>
-                <div className={`flex items-center gap-3 mb-6 border-b pb-4 ${isDark ? 'border-white/10' : 'border-gray-100'}`}>
-                    <Trophy className={styles.accent} size={24} />
-                    <h2 className={`text-2xl font-serif ${styles.textPrimary}`}>Ranking Final</h2>
+            {/* Sponsors Section */}
+            <section className={`p-8 rounded-xl border text-center ${styles.card} mt-12`}>
+                <h2 className={`text-xl font-serif mb-6 uppercase tracking-widest ${styles.textSecondary}`}>Patrocinadores Oficiales</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+                    {/* Sponsors */}
+                    <div className="flex items-center justify-center p-4">
+                        <img src="/sponsors/stake.svg" alt="Stake" className="h-8 object-contain" />
+                    </div>
+                    <div className="flex items-center justify-center p-4">
+                        <img src="/sponsors/dynamo-1.png" alt="Dynamo" className="h-12 object-contain" />
+                    </div>
+                    <div className="flex items-center justify-center p-4">
+                        <img src="/sponsors/AMPER-1.png" alt="Amper" className="h-12 object-contain" />
+                    </div>
+                    <div className="flex items-center justify-center p-4">
+                        <img src="/sponsors/LOGO_HUMO_BARRILES.webp" alt="Humo Barriles" className="h-16 object-contain" />
+                    </div>
                 </div>
-                <p className={`text-sm mb-6 ${styles.textSecondary}`}>
-                    *Datos de ejemplo representativos. Los resultados oficiales pueden variar.
-                </p>
-                <LeaderBoard
-                    candidates={enrichedFinalRanking}
-                    dangerList={[]}
-                    isDark={isDark}
-                />
-            </section>
-
-            {/* All Participants */}
-            <section>
-                <div className={`flex items-center gap-3 mb-6 border-b pb-4 ${isDark ? 'border-white/10' : 'border-gray-100'}`}>
-                    <Users className={styles.accent} size={24} />
-                    <h2 className={`text-2xl font-serif ${styles.textPrimary}`}>Todos los Participantes</h2>
-                </div>
-                <ParticipantsGrid candidates={enrichedParticipants} isDark={isDark} />
-            </section>
-
-            {/* Where it was streamed */}
-            <section className={`p-8 rounded-xl border text-center ${styles.card}`}>
-                <Tv className={`mx-auto mb-4 ${styles.accent}`} size={32} />
-                <h2 className={`text-2xl font-serif mb-2 ${styles.textPrimary}`}>¿Dónde se transmitió?</h2>
-                <p className={`mb-6 ${styles.textSecondary}`}>
-                    Todo el evento fue transmitido en Kick con streams diarios de hasta 10 horas.
-                </p>
-                <a
-                    href={EVENT_INFO.platform.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-[#53fc18] text-black font-bold py-3 px-6 rounded-lg hover:bg-[#42ca12] transition-all transform hover:scale-105"
-                >
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                        <path d="M1.333 0h21.334C23.4 0 24 .6 24 1.333v21.334c0 .733-.6 1.333-1.333 1.333H1.333C.6 24 0 23.4 0 22.667V1.333C0 .6.6 0 1.333 0zm16.334 18.667v-4l-3.667-3.334 3.667-3.333V4h-4.667v5.333L9.333 5.667H5.333v12.666h4v-5.333l3.667 3.667v2h4z" />
-                    </svg>
-                    kick.com/{EVENT_INFO.platform.channel}
-                </a>
             </section>
         </div>
     );

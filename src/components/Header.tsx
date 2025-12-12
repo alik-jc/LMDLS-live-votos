@@ -25,13 +25,13 @@ export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme, currentView
                         onClick={() => onNavigate('dashboard')}
                         className={`transition-colors ${currentView === 'dashboard' ? 'text-white' : 'hover:text-white'}`}
                     >
-                        Votación
+                        Inicio
                     </button>
                     <button
-                        onClick={() => onNavigate('participants')}
-                        className={`transition-colors ${currentView === 'participants' ? 'text-white' : 'hover:text-white'}`}
+                        onClick={() => onNavigate('community')}
+                        className={`transition-colors ${currentView === 'community' ? 'text-white' : 'hover:text-white'}`}
                     >
-                        Participantes
+                        Integrantes
                     </button>
                     <button
                         onClick={() => onNavigate('about')}
