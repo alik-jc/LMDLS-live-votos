@@ -27,10 +27,10 @@ export const CommunityPage = ({ isDark }: CommunityPageProps) => {
                     Las Votaciones!
                 </h1>
                 <p className={`text-lg ${styles.textSecondary} mb-4`}>
-                    Esta app nació de la necesidad creada después de descubrir que el sistema de encuestas con las cuales...
+                    Plataforma de visualización en tiempo real que centralizaba los resultados de las votaciones, ofreciendo actualizaciones automáticas y transparencia total para la comunidad.
                 </p>
                 <p className={`text-sm ${styles.textSecondary}`}>
-                    Conoce a los protagonistas de La Mansión: Participantes, Profesores y Rectores.
+                    Conoce a los protagonistas de La Mansión: Participantes.
                 </p>
             </div>
 
